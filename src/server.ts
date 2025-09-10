@@ -1,4 +1,3 @@
-import { serve } from "bun";
 import index from "./index.html";
 import dashboard from "./dashboard/dashboard.html";
 import {
@@ -6,11 +5,40 @@ import {
   type SettingsMessage,
 } from "./schemas/settings";
 import open from "open";
+import { parseArgs } from "util";
+
+const args = parseArgs({
+  args: process.argv,
+  options: {
+    help: {
+      type: "boolean",
+      short: "h",
+    },
+    host: {
+      type: "string",
+      // only localhost is whitelisted for the huismetbenen API (CORS) right now
+      default: "localhost",
+    },
+    port: {
+      type: "string",
+      default: "7270",
+      short: "p",
+    },
+  },
+  strict: true,
+  allowPositionals: true,
+}).values;
+
+if (args.help) {
+  console.log(`ndc-overlay [--host localhost] [-p|--port 7270]`);
+  process.exit();
+}
 
 let lastSettings: SettingsMessage | null = null;
 
-const server = serve({
-  port: "7270",
+const server = Bun.serve({
+  hostname: args.host,
+  port: args.port,
   routes: {
     "/dashboard": dashboard,
     "/ws": (req, server) => {
