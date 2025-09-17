@@ -52,6 +52,7 @@ export function DashboardSettingsProvider({
           settings: nextState,
         };
         ws.send(JSON.stringify(message));
+        console.log("sent message to the dashboard websocket server");
         return nextState;
       });
     },
@@ -68,13 +69,14 @@ export function DashboardSettingsProvider({
     });
 
     ws.addEventListener("error", (e) => {
-      console.log(
+      console.error(
         "error on trying to connect to the dashboard websocket server:",
         e.error,
       );
     });
 
     ws.addEventListener("message", (e) => {
+      console.log("received message from the dashboard websocket server");
       const { success, data, error } = settingsMessageSchema.safeParse(
         JSON.parse(e.data),
       );

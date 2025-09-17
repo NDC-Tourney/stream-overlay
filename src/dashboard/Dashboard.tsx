@@ -13,12 +13,19 @@ export function Dashboard() {
   const { data: matches } = useCurrentMatchesQuery();
   const [settings, setSettings] = useSettings();
   const autoselect = settings.automaticSelect;
+
   const selectedMatch = useMemo(() => {
+    if (!settings.matchId && matches?.[0]) {
+      return matches[0].uid;
+    }
+
     const match = matches?.find((m) => m.uid === settings.matchId);
+
     return match
       ? `${match.uid} ${match.player1.name} - ${match.player2.name}`
       : "Select";
   }, [matches, settings.matchId]);
+
   const countdownDate = dayjs(settings.countdown).format("HH:mm");
 
   const setAutoselect = (value: boolean) => {
