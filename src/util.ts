@@ -18,3 +18,5 @@ export function getBeatmapBgUrl(setId?: number) {
 
   return `https://assets.ppy.sh/beatmaps/${setId}/covers/cover.jpg`;
 }
+
+export const isProduction = process.env.NODE_ENV === "production";
