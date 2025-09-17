@@ -8,7 +8,8 @@ const targets: Record<string, Bun.Build.Target> = {
 
 const gitCommit = await $`git rev-parse HEAD`.text();
 const buildTime = new Date().toISOString();
-const remoteUrl = await $`git config --get remote.origin.url`.text();
+const remoteUrl =
+  await $`git config --get remote.origin.url | sed -e 's/:/\//g'| sed -e 's/ssh\/\/\///g'| sed -e 's/git@/https:\/\//g'`.text();
 const repoUrl = await Bun.fetch(remoteUrl).then((response) => response.url);
 
 const stringifyValues = (obj: Record<string, string>) => {
