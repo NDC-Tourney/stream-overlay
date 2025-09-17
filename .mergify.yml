@@ -2,3 +2,8 @@ queue_rules:
   - merge_method: fast-forward
     autoqueue: true
     name: merge queue
+    queue_conditions:
+      - or:
+          - label = ready-to-merge
+merge_protections_settings:
+  post_comment: false
