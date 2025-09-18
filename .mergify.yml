@@ -4,10 +4,11 @@ queue_rules:
     name: merge queue
     queue_conditions:
       - or:
-          - changes-requested-reviews-by = 0
-          - approved-reviews-by >= 1
+          - and:
+              - "#approved-reviews-by >= 1"
+              - "#changes-requested-reviews-by = 0"
           - label = ready-to-merge
-    branch_protection_injection_mode: none
+    branch_protection_injection_mode: queue
 merge_protections_settings:
   post_comment: false
 pull_request_rules:
