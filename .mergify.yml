@@ -8,13 +8,5 @@ queue_rules:
               - "#approved-reviews-by >= 1"
               - "#changes-requested-reviews-by = 0"
           - label = ready-to-merge
-    branch_protection_injection_mode: queue
 merge_protections_settings:
   post_comment: false
-pull_request_rules:
-  - name: refresh label
-    description: Refresh when the ready-to-merge label is attached
-    conditions:
-      - label = ready-to-merge
-    actions:
-      queue:
