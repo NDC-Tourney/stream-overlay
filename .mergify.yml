@@ -10,3 +10,14 @@ queue_rules:
           - label = ready-to-merge
 merge_protections_settings:
   post_comment: false
+pull_request_rules:
+  - name: Add label when review needed
+    conditions:
+      - -closed
+      - "#approved-reviews-by = 0"
+      - "#changes-requested-reviews-by = 0"
+      - label != ready-to-merge
+    actions:
+      label:
+        toggle:
+          - needs-review
