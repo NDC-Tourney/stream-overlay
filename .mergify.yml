@@ -16,7 +16,7 @@ pull_request_rules:
       - or:
           - "#approved-reviews-by = 0"
           - "#changes-requested-reviews-by = 0"
-          - label != ready-to-merge
+      - label != ready-to-merge
       - -closed
       - -draft
     actions:
