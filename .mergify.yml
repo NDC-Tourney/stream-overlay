@@ -13,20 +13,13 @@ merge_protections_settings:
 pull_request_rules:
   - name: Add label when review needed
     conditions:
-      - -closed
-      - "#approved-reviews-by = 0"
-      - "#changes-requested-reviews-by = 0"
-      - label != ready-to-merge
+      - or:
+          - -closed
+          - "#approved-reviews-by = 0"
+          - "#changes-requested-reviews-by = 0"
+          - label != ready-to-merge
+      - -draft
     actions:
       label:
         toggle:
           - needs-review
-merge_protections:
-  - name: One review or merge label
-    description: PR should either have one approved review or the ready-to-merge label
-    if:
-      - base = master
-    success_conditions:
-      - or:
-          - label = ready-to-merge
-          - "#approved-reviews-by >= 1"
