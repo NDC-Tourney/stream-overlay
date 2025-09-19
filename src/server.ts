@@ -6,7 +6,7 @@ import {
 } from "./schemas/settings";
 import { isProduction } from "./util";
 import { parseArgs } from "util";
-import open from "open";
+import type { HTMLBundle } from "bun";
 
 const args = parseArgs({
   args: process.argv,
@@ -35,8 +35,27 @@ if (args.help) {
   process.exit();
 }
 
-function run() {
+async function overrideHtmlEtags(htmlFiles: HTMLBundle[], value: string) {
+  htmlFiles.forEach((htmlFile) =>
+    htmlFile.files?.forEach((file) => {
+      if (file.loader === "html") {
+        file.headers.etag = value;
+      }
+    }),
+  );
+}
+
+declare var BUILD_TIME_ETAG: string;
+
+async function run() {
   let lastSettings: SettingsMessage | null = null;
+
+  // Bun.build does not seem to change the etag header on changing the hash part
+  // of asset filenames because the content of the original HTML file didn't
+  // change, leading to 404s, so instead we inject our own at build time
+  if (typeof BUILD_TIME_ETAG !== "undefined") {
+    await overrideHtmlEtags([index, dashboard], BUILD_TIME_ETAG);
+  }
 
   return Bun.serve({
     hostname: args.host,
