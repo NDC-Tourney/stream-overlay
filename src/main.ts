@@ -7,7 +7,7 @@ if (isProduction) {
   await Updater.checkAndApplyUpdates();
 }
 
-const server = Server.run();
+const server = await Server.run();
 console.log(
   `Server listening on ${server.url}\nDashboard listening on ${new URL("dashboard", server.url)}`,
 );
