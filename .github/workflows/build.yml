@@ -1,0 +1,40 @@
+name: "Build"
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: "bun install --frozen-lockfile"
+      - name: "Build app"
+        run: "bun run build"
+
+      - name: Upload artifacts
+        id: upload_artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-artifacts
+          path: dist/*
+          if-no-files-found: error
+          overwrite: true
+    outputs:
+      artifact-id: ${{ steps.upload_artifacts.outputs.artifact-id }}
+
+  release:
+    needs:
+      - build
+    uses: ./.github/workflows/release.yml
+    with:
+      artifact-id: ${{ needs.build.outputs.artifact-id }}
