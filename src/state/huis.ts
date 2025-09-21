@@ -97,22 +97,32 @@ const matchSchema = z
     supporters: z.array(
       z.object({
         supported_user_id: z.number(),
+        supporter_user_id: z.number(),
+        supporter_name: z.string(),
       }),
     ),
   })
   .transform((match) => {
-    const getPlayer = (i: 1 | 2) => ({
-      name: match[`name${i}`],
-      osuId: match[`player${i}_id`],
-      seed: match[`seed${i}`],
-      avatarUrl: getAvatarUrl(match[`player${i}_id`]),
-      pickemsRate: match[`pickems_rate${i}`].toFixed(2),
-      score: match[`team${i}_score`],
-      winner: match.winner === i,
-      supporters: match["supporters"].filter(
-        (s) => s.supported_user_id === match[`player${i}_id`],
-      ).length,
-    });
+    const getPlayer = (i: 1 | 2) => {
+      const supporters = match["supporters"]
+        .map((s) => ({
+          name: s.supporter_name,
+          id: s.supporter_user_id,
+          supportingId: s.supported_user_id,
+        }))
+        .filter((s) => s.supportingId === match[`player${i}_id`]);
+
+      return {
+        name: match[`name${i}`],
+        osuId: match[`player${i}_id`],
+        seed: match[`seed${i}`],
+        avatarUrl: getAvatarUrl(match[`player${i}_id`]),
+        pickemsRate: match[`pickems_rate${i}`].toFixed(2),
+        score: match[`team${i}_score`],
+        winner: match.winner === i,
+        supporters,
+      };
+    };
 
     type Player = WithRequired<
       Partial<ReturnType<typeof getPlayer>>,
@@ -196,14 +206,14 @@ export function useMatchQuery(): WithRequired<
         name: "???",
         avatarUrl,
         seed: 0,
-        supporters: 0,
+        supporters: [],
         pickemsRate: "0.00",
       },
       player2: {
         name: "???",
         avatarUrl,
         seed: 0,
-        supporters: 0,
+        supporters: [],
         pickemsRate: "0.00",
       },
     };
@@ -219,14 +229,14 @@ export function useMatchQuery(): WithRequired<
         name: "Unknown player",
         avatarUrl,
         seed: 0,
-        supporters: 0,
+        supporters: [],
         pickemsRate: "0.00",
       },
       player2: {
         name: "Unknown player",
         avatarUrl,
         seed: 0,
-        supporters: 0,
+        supporters: [],
         pickemsRate: "0.00",
       },
     };

@@ -9,6 +9,7 @@ import { FooterContent } from "./components/FooterContent";
 import { useTosu } from "./state/tosu";
 import { useMatchQuery } from "@/state/huis";
 import trophy from "./static/img/trophy.png";
+import SupportersAvatars from "./components/SupportersAvatars";
 
 interface WinnerScreenProps {
   from?: string;
@@ -29,7 +30,7 @@ export function WinnerScreen({ from, to }: WinnerScreenProps) {
   const totalPoints = Math.ceil(tourney.bestOf / 2);
 
   let winner = match.player1;
-  let winnerTeam = "red";
+  let winnerTeam: "red" | "blue" = "red";
 
   if (tourney.points.left == totalPoints) {
     winner = match.player1;
@@ -62,19 +63,21 @@ export function WinnerScreen({ from, to }: WinnerScreenProps) {
                     <div id="win-player-name">
                       {winner.name !== "" ? winner.name : "Unknown player"}
                     </div>
-                    <div id="win-player-seed">Seed: {winner.seed}</div>
-                    <div id="win-player-supporters">
-                      Supporters: {winner.supporters}
-                    </div>
                     <div id="win-player-pickems">
-                      Pickems: {winner.pickemsRate}%
+                      <span className="player-info-label">Pickems: </span>
+                      {winner.pickemsRate}%
+                    </div>
+                    <div id="win-player-seed">
+                      <span className="player-info-label">Seed: </span>
+                      {winner.seed}
                     </div>
                   </div>
                 </div>
-                <div id="win-stage-info">
+                {/* <div id="win-stage-info">
                   <div id="win-stage-name">Quarter Finals</div>
                   <div id="win-winner-loser">(Winners Bracket)</div>
-                </div>
+                </div> */}
+                <SupportersAvatars player={winner} side={winnerTeam} />
               </div>
               <div id="win-right">
                 <div id="trophy">

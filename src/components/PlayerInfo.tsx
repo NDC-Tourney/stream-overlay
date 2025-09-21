@@ -28,14 +28,17 @@ export function PlayerInfo({ playerNum }: { playerNum: 1 | 2 }) {
           <div id="player-name" className={`align-${side}`}>
             {player.name ?? "Unknown player"}
           </div>
-          <div id="player-seed" className={`align-${side}`}>
-            Seed: {player.seed}
+          <div id="player-pickems" className={`align-${side}`}>
+            <span className="player-info-label">Pickems: </span>
+            {player.pickemsRate}%
           </div>
           <div id="player-supporters" className={`align-${side}`}>
-            Supporters: {player.supporters}
+            <span className="player-info-label">Supporters: </span>
+            {player.supporters.length}
           </div>
-          <div id="player-pickems" className={`align-${side}`}>
-            Pickems: {player.pickemsRate}%
+          <div id="player-seed" className={`align-${side}`}>
+            <span className="player-info-label">Seed: </span>
+            {player.seed}
           </div>
         </div>
       </div>
