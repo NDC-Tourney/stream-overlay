@@ -17,6 +17,7 @@ html {
   margin: 0;
   overflow-y: hidden;
   -webkit-font-smoothing: antialiased;
+  background-color: #000;
 }
 
 p {
