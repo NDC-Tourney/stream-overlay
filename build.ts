@@ -30,6 +30,23 @@ const stringifyValues = (obj: Record<string, JSONType>) => {
 for (const [platform, target] of Object.entries(targets)) {
   await Bun.build({
     // plugins: [bunPluginTailwind],
+    plugins: [
+      {
+        name: "hooks",
+        setup(build) {
+          build.onEnd((result) => {
+            if (result.success) {
+              console.log(`✅ Build for ${platform} (${target}) successful :3`);
+            } else {
+              console.log(
+                `❌ Build for ${platform} (${target}) failed with ${result.logs.length} errors :c\n`,
+                result.logs,
+              );
+            }
+          });
+        },
+      },
+    ],
     entrypoints: ["./src/main.ts"],
     outdir: "./dist",
     env: "PUBLIC_*",
@@ -48,5 +65,3 @@ for (const [platform, target] of Object.entries(targets)) {
     sourcemap: true,
   });
 }
-
-console.log("Build successful :3");
