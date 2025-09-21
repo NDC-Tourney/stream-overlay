@@ -10,7 +10,7 @@ import { HeaderContent } from "./components/HeaderContent";
 import { FooterContent } from "./components/FooterContent";
 import { PlayerInfo } from "./components/PlayerInfo";
 import { StageInfo } from "./components/StageInfo";
-import { useMappoolQuery, useMatchQuery, type Beatmap } from "./state/huis";
+import { useMappoolQuery, type Beatmap } from "./state/huis";
 import { useSettings } from "./state/dashboard";
 
 function ModBracket(
@@ -18,7 +18,6 @@ function ModBracket(
   mod: Lowercase<Beatmap["modBracket"]>,
 ) {
   const [settings] = useSettings();
-  const match = useMatchQuery();
   const tb = mod === "tb" && "tb";
 
   return (
@@ -26,7 +25,7 @@ function ModBracket(
       {beatmaps.map((map) => (
         <div className={`mappool-map ${mod}`} key={map.mapId}>
           {(["player1", "player2"] as const).map((player) => (
-            <>
+            <div key={`${player}-choices`}>
               <div
                 className={clsx(
                   `picked-${tb || player}`,
@@ -58,7 +57,7 @@ function ModBracket(
                   </div>*/}
                 </div>
               </div>
-            </>
+            </div>
           ))}
           <div className={clsx("mappool-map-top", tb)}>
             <img className={"mappool-map-bg"} src={map.bgUrl} />
