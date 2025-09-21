@@ -5,7 +5,18 @@
   "scripts": {
     "dev": "bun --hot --console-depth=0 src/main.ts",
     "start": "NODE_ENV=production bun src/main.ts",
-    "build": "bun run build.ts"
+    "build": "bun run build.ts",
+    "cut-release": "nbgv prepare-release",
+    "prepare-pack:win": "vpk download github --repoUrl https://github.com/NDC-Tourney/stream-overlay -c win",
+    "prepare-pack:linux": "vpk download github --repoUrl https://github.com/NDC-Tourney/stream-overlay -c linux",
+    "prepare-pack": "bun run prepare-pack:win prepare-pack:linux",
+    "pack:win": "vpk [win] pack -u NDC.StreamOverlay -v $(nbgv get-version -v semver2) -p dist/win -e ndc-stream-overlay.exe",
+    "pack:linux": "vpk [linux] pack -u NDC.StreamOverlay -v $(nbgv get-version -v semver2) -p dist/linux -e ndc-stream-overlay",
+    "pack": "bun run pack:win && bun run pack:linux",
+    "upload-release:win": "vpk upload github --repoUrl https://github.com/ndc-tourney/stream-overlay --publish --tag $(nbgv get-version -v semver2) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c win",
+    "upload-release:linux": "vpk upload github --repoUrl https://github.com/ndc-tourney/stream-overlay --publish --tag $(nbgv get-version -v semver2) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c linux",
+    "upload-release": "bun run upload-release:win && bun run upload-release:linux",
+    "full-release-process": "bun run cut-release && bun run build && bun run prepare-pack && bun run pack && bun run upload-release"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.87.1",
