@@ -685,6 +685,7 @@ p {
   grid-template-rows: 1;
   row-gap: 10px;
   width: 740px;
+  margin: 0 -25px;
 }
 
 /* kinda cursed but fuck iiit */
