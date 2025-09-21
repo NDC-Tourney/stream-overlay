@@ -36,6 +36,8 @@ merge_protections:
     if:
       - base = master
     success_conditions:
-      - or:
-          - label = ready-to-merge
-          - "#approved-reviews-by >= 1"
+      - and:
+          - -closed
+          - or:
+              - label = ready-to-merge
+              - "#approved-reviews-by >= 1"
