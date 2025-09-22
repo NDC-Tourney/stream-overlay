@@ -14,9 +14,9 @@
     "pack:linux": "vpk [linux] pack -u NDC.StreamOverlay -v $(nbgv get-version -v semver2) -p dist/linux -e ndc-stream-overlay",
     "pack": "bun run pack:win && bun run pack:linux",
     "upload-release:win": "vpk upload github --repoUrl https://github.com/ndc-tourney/stream-overlay --publish --tag $(nbgv get-version -v semver2) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c win",
-    "upload-release:linux": "vpk upload github --repoUrl https://github.com/ndc-tourney/stream-overlay --publish --tag $(nbgv get-version -v semver2) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c linux",
+    "upload-release:linux": "vpk upload github --repoUrl https://github.com/ndc-tourney/stream-overlay --publish --tag $(nbgv get-version -v semver2) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c linux --merge",
     "upload-release": "bun run upload-release:win && bun run upload-release:linux",
-    "full-release-process": "bun run cut-release && git prev -o && bun run build && bun run prepare-pack && bun run pack && bun run upload-release"
+    "full-release-process": "bun run cut-release && git prev -o && git push && bun run build && bun run prepare-pack && bun run pack && bun run upload-release && git sw master && git push"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.87.1",
