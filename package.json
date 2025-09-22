@@ -9,7 +9,7 @@
     "cut-release": "nbgv prepare-release",
     "prepare-pack:win": "vpk download github --repoUrl https://github.com/NDC-Tourney/stream-overlay -c win",
     "prepare-pack:linux": "vpk download github --repoUrl https://github.com/NDC-Tourney/stream-overlay -c linux",
-    "prepare-pack": "bun run prepare-pack:win prepare-pack:linux",
+    "prepare-pack": "bun run prepare-pack:win && bun run prepare-pack:linux",
     "pack:win": "vpk [win] pack -u NDC.StreamOverlay -v $(nbgv get-version -v semver2) -p dist/win -e ndc-stream-overlay.exe",
     "pack:linux": "vpk [linux] pack -u NDC.StreamOverlay -v $(nbgv get-version -v semver2) -p dist/linux -e ndc-stream-overlay",
     "pack": "bun run pack:win && bun run pack:linux",
