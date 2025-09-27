@@ -47,89 +47,159 @@ export type tosuData = {
   beatmap: tosuBeatmap;
 };
 
-const tosuApiResponseSchema = z.object({
-  tourney: z.object({
-    scoreVisible: z.boolean(),
-    starsVisible: z.boolean(),
-    ipcState: z.number(),
-    bestOF: z.number(),
-    team: z.object({
-      left: z.string(),
-      right: z.string(),
-    }),
-    points: z.object({
-      left: z.number(),
-      right: z.number(),
-    }),
-    chat: z.array(z.unknown()),
-    totalScore: z.object({
-      left: z.number(),
-      right: z.number(),
-    }),
-    clients: z.array(z.unknown()),
+const tosuBeatmapSchema = z.object({
+  isKiai: z.boolean(),
+  isBreak: z.boolean(),
+  isConvert: z.boolean(),
+  time: z.object({
+    live: z.number(),
+    firstObject: z.number(),
+    lastObject: z.number(),
+    mp3Length: z.number(),
   }),
-  beatmap: z.object({
-    isKiai: z.boolean(),
-    isBreak: z.boolean(),
-    isConvert: z.boolean(),
-    time: z.object({
+  status: z.object({
+    number: z.number(),
+    name: z.string(),
+  }),
+  id: z.number(),
+  set: z.number(),
+  artist: z.string(),
+  artistUnicode: z.string(),
+  title: z.string(),
+  titleUnicode: z.string(),
+  mapper: z.string(),
+  version: z.string(),
+  stats: z.object({
+    stars: z.object({
       live: z.number(),
-      firstObject: z.number(),
-      lastObject: z.number(),
-      mp3Length: z.number(),
+      total: z.number(),
     }),
-    status: z.object({
-      number: z.number(),
-      name: z.string(),
+    ar: z.object({
+      original: z.number(),
+      converted: z.number(),
     }),
-    id: z.number(),
-    set: z.number(),
-    artist: z.string(),
-    artistUnicode: z.string(),
-    title: z.string(),
-    titleUnicode: z.string(),
-    mapper: z.string(),
-    version: z.string(),
-    stats: z.object({
-      stars: z.object({
-        live: z.number(),
-        total: z.number(),
-      }),
-      ar: z.object({
-        original: z.number(),
-        converted: z.number(),
-      }),
-      cs: z.object({
-        original: z.number(),
-        converted: z.number(),
-      }),
-      od: z.object({
-        original: z.number(),
-        converted: z.number(),
-      }),
-      hp: z.object({
-        original: z.number(),
-        converted: z.number(),
-      }),
-      bpm: z.object({
-        realtime: z.number(),
-        common: z.number(),
-        min: z.number(),
-        max: z.number(),
-      }),
-      maxCombo: z.number(),
+    cs: z.object({
+      original: z.number(),
+      converted: z.number(),
     }),
-  }),
-  directPath: z.object({
-    beatmapBackground: z.string(),
-  }),
-  folders: z.object({
-    game: z.string(),
-    skin: z.string(),
-    songs: z.string(),
-    beatmap: z.string(),
+    od: z.object({
+      original: z.number(),
+      converted: z.number(),
+    }),
+    hp: z.object({
+      original: z.number(),
+      converted: z.number(),
+    }),
+    bpm: z.object({
+      realtime: z.number(),
+      common: z.number(),
+      min: z.number(),
+      max: z.number(),
+    }),
+    maxCombo: z.number(),
   }),
 });
+
+const tosuApiResponseSchema = z
+  .object({
+    tourney: z.object({
+      scoreVisible: z.boolean(),
+      starsVisible: z.boolean(),
+      ipcState: z.number(),
+      bestOF: z.number(),
+      team: z.object({
+        left: z.string(),
+        right: z.string(),
+      }),
+      points: z.object({
+        left: z.number(),
+        right: z.number(),
+      }),
+      chat: z.array(z.unknown()),
+      totalScore: z.object({
+        left: z.number(),
+        right: z.number(),
+      }),
+      clients: z.array(
+        z.object({
+          beatmap: z.object({
+            stats: tosuBeatmapSchema.shape.stats,
+          }),
+        }),
+      ),
+    }),
+    beatmap: tosuBeatmapSchema,
+    directPath: z.object({
+      beatmapBackground: z.string(),
+    }),
+    folders: z.object({
+      game: z.string(),
+      skin: z.string(),
+      songs: z.string(),
+      beatmap: z.string(),
+    }),
+  })
+  .transform((tosuResponse) => {
+    const beatmapBackgroundPath =
+      `${tosuResponse.folders.songs}/${tosuResponse.directPath.beatmapBackground}`.replaceAll(
+        "\\",
+        "/",
+      );
+
+    return {
+      player1: {
+        name: tosuResponse.tourney.team.left,
+        score: tosuResponse.tourney.totalScore.left,
+      },
+      player2: {
+        name: tosuResponse.tourney.team.right,
+        score: tosuResponse.tourney.totalScore.right,
+      },
+      tourney: {
+        scoreVisible: tosuResponse.tourney.scoreVisible,
+        bestOf: tosuResponse.tourney.bestOF,
+        points: {
+          left: tosuResponse.tourney.points.left,
+          right: tosuResponse.tourney.points.right,
+        },
+        chat: tosuResponse.tourney.chat,
+        clients: tosuResponse.tourney.clients,
+      },
+      beatmap: {
+        title: tosuResponse.beatmap.title,
+        artist: tosuResponse.beatmap.artist,
+        setId: tosuResponse.beatmap.set,
+        bgUrl: getBeatmapBgUrl(tosuResponse.beatmap.set),
+        difficulty: tosuResponse.beatmap.version,
+        mapper: tosuResponse.beatmap.mapper,
+        cs:
+          tosuResponse.tourney.clients[0]?.beatmap.stats.cs.converted ||
+          tosuResponse.beatmap.stats.cs.converted ||
+          tosuResponse.tourney.clients[0]?.beatmap.stats.cs.original ||
+          tosuResponse.beatmap.stats.cs.original,
+        ar:
+          tosuResponse.tourney.clients[0]?.beatmap.stats.ar.converted ||
+          tosuResponse.beatmap.stats.ar.converted ||
+          tosuResponse.tourney.clients[0]?.beatmap.stats.ar.original ||
+          tosuResponse.beatmap.stats.ar.original,
+        od:
+          tosuResponse.tourney.clients[0]?.beatmap.stats.od.converted ||
+          tosuResponse.beatmap.stats.od.converted ||
+          tosuResponse.tourney.clients[0]?.beatmap.stats.od.original ||
+          tosuResponse.beatmap.stats.od.original,
+        stars:
+          tosuResponse.tourney.clients[0]?.beatmap.stats.stars.total ||
+          tosuResponse.beatmap.stats.stars.total,
+        bpm:
+          tosuResponse.tourney.clients[0]?.beatmap.stats.bpm.realtime ||
+          tosuResponse.beatmap.stats.bpm.realtime,
+        length:
+          tosuResponse.beatmap.time.lastObject -
+          tosuResponse.beatmap.time.firstObject,
+        backgroundPath: beatmapBackgroundPath,
+      },
+    };
+  });
 
 const TosuContext = createContext<tosuData | null>(null);
 
@@ -174,48 +244,8 @@ export function TosuProvider({ children }: { children: ReactNode }) {
       try {
         const json = JSON.parse(e.data);
         const parsedData = tosuApiResponseSchema.parse(json);
-        const beatmapBackgroundPath =
-          `${parsedData.folders.songs}/${parsedData.directPath.beatmapBackground}`.replaceAll(
-            "\\",
-            "/",
-          );
 
-        setTosuData({
-          player1: {
-            name: parsedData.tourney.team.left,
-            score: parsedData.tourney.totalScore.left,
-          },
-          player2: {
-            name: parsedData.tourney.team.right,
-            score: parsedData.tourney.totalScore.right,
-          },
-          tourney: {
-            scoreVisible: parsedData.tourney.scoreVisible,
-            bestOf: parsedData.tourney.bestOF,
-            points: {
-              left: parsedData.tourney.points.left,
-              right: parsedData.tourney.points.right,
-            },
-            chat: parsedData.tourney.chat,
-          },
-          beatmap: {
-            title: parsedData.beatmap.title,
-            artist: parsedData.beatmap.artist,
-            setId: parsedData.beatmap.set,
-            bgUrl: getBeatmapBgUrl(parsedData.beatmap.set),
-            difficulty: parsedData.beatmap.version,
-            mapper: parsedData.beatmap.mapper,
-            cs: parsedData.beatmap.stats.cs.converted,
-            ar: parsedData.beatmap.stats.ar.converted,
-            od: parsedData.beatmap.stats.od.converted,
-            stars: parsedData.beatmap.stats.stars.total,
-            bpm: parsedData.beatmap.stats.bpm.realtime,
-            length:
-              parsedData.beatmap.time.lastObject -
-              parsedData.beatmap.time.firstObject,
-            backgroundPath: beatmapBackgroundPath,
-          },
-        });
+        setTosuData(parsedData);
       } catch (e) {
         console.error("failed to parse tosu data schema:", e);
       }
