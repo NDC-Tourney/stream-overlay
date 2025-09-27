@@ -7,7 +7,7 @@ export type WithOptional<T, U extends keyof T> = Pick<
 
 export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
-export function getAvatarUrl(userId?: number | string) {
+export function getAvatarUrl(userId: number | string) {
   return `https://a.ppy.sh/${userId}`;
 }
 

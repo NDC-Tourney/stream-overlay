@@ -193,10 +193,10 @@ export function useMatchQuery(): WithRequired<
   Partial<Match>,
   "roundName" | "bracket" | "player1" | "player2"
 > {
-  const { data, error, isPending } = useCurrentMatchesQuery();
+  const { data: matches, error, isPending } = useCurrentMatchesQuery();
   const [settings] = useSettings();
   const matchId = settings.matchId;
-  const avatarUrl = getAvatarUrl();
+  const defaultAvatarUrl = getAvatarUrl("");
 
   if (isPending) {
     return {
@@ -204,14 +204,14 @@ export function useMatchQuery(): WithRequired<
       bracket: "???",
       player1: {
         name: "???",
-        avatarUrl,
+        avatarUrl: defaultAvatarUrl,
         seed: 0,
         supporters: [],
         pickemsRate: "0.00",
       },
       player2: {
         name: "???",
-        avatarUrl,
+        avatarUrl: defaultAvatarUrl,
         seed: 0,
         supporters: [],
         pickemsRate: "0.00",
@@ -219,7 +219,7 @@ export function useMatchQuery(): WithRequired<
     };
   }
 
-  const match = data?.find((m) => m.uid === matchId);
+  const match = matches?.find((m) => m.uid === matchId);
 
   if (!match) {
     return {
@@ -227,14 +227,14 @@ export function useMatchQuery(): WithRequired<
       bracket: "???",
       player1: {
         name: "Unknown player",
-        avatarUrl,
+        avatarUrl: defaultAvatarUrl,
         seed: 0,
         supporters: [],
         pickemsRate: "0.00",
       },
       player2: {
         name: "Unknown player",
-        avatarUrl,
+        avatarUrl: defaultAvatarUrl,
         seed: 0,
         supporters: [],
         pickemsRate: "0.00",

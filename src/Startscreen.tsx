@@ -10,8 +10,6 @@ import { FooterContent } from "./components/FooterContent";
 import Countdown, { zeroPad } from "react-countdown";
 import { useSettings } from "./state/dashboard";
 import { PlayerCard } from "./components/PlayerCard";
-import { PlayerAvatar } from "./components/PlayerAvatar";
-import { getAvatarUrl } from "./util";
 import SupportersAvatars from "./components/SupportersAvatars";
 
 interface StartScreenProps {

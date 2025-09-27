@@ -3,6 +3,7 @@ import { useSettings } from "@/state/dashboard";
 import {
   useCurrentMatchesQuery,
   useMappoolQuery,
+  useScheduleQuery,
   type Match,
 } from "@/state/huis";
 import dayjs from "dayjs";
@@ -11,8 +12,16 @@ import { produce } from "immer";
 
 export function Dashboard() {
   const { data: matches } = useCurrentMatchesQuery();
+  const { data: schedule } = useScheduleQuery();
   const [settings, setSettings] = useSettings();
   const autoselect = settings.automaticSelect;
+
+  // default to the next upcoming match on startup
+  if (!settings.matchId && schedule.upcoming[0]) {
+    const nextMatch = schedule.upcoming[0].uid;
+    setSettings((settings) => ({ ...settings, matchId: nextMatch }));
+  }
+
   const selectedMatch = useMemo(() => {
     const match = matches?.find((m) => m.uid === settings.matchId);
     return match
@@ -169,7 +178,7 @@ export function Dashboard() {
             ))}
           </div>
         </div>
-        <div id="match-select-auto">
+        {/* <div id="match-select-auto">
           <label
             htmlFor="match-select-auto-checkbox"
             id="match-select-auto-text"
@@ -183,7 +192,7 @@ export function Dashboard() {
             checked={autoselect}
             onChange={(e) => setAutoselect(e.target.checked)}
           ></input>
-        </div>
+        </div> */}
       </div>
 
       <div className="divider"></div>
