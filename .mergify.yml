@@ -7,7 +7,7 @@ queue_rules:
           - and:
               - "#approved-reviews-by >= 1"
               - "#changes-requested-reviews-by = 0"
-          - label = ready-to-merge
+          - label = skip-review
 merge_protections_settings:
   post_comment: false
 pull_request_rules:
@@ -41,27 +41,27 @@ pull_request_rules:
       - or:
           - "#approved-reviews-by = 0"
           - "#changes-requested-reviews-by = 0"
-      - label != ready-to-merge
+      - label != skip-review
       - -closed
       - -draft
     actions:
       label:
         toggle:
           - needs-review
-  - name: Remove ready-to-merge label after merge/close
+  - name: Remove skip-review label after merge/close
     conditions:
       - closed
     actions:
       label:
         remove:
-          - ready-to-merge
+          - skip-review
 merge_protections:
   - name: One review or merge label
-    description: PR should either have one approved review or the ready-to-merge label
+    description: PR should either have one approved review or the skip-review label
     if:
       - base = master
     success_conditions:
       - or:
           - closed
-          - label = ready-to-merge
+          - label = skip-review
           - "#approved-reviews-by >= 1"
