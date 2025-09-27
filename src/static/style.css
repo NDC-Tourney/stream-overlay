@@ -657,7 +657,7 @@ p {
 
 #ss-middle {
   display: grid;
-  grid-template-columns: 1fr 360px 1fr;
+  grid-template-columns: 1fr 344px 1fr;
 }
 
 .ss-supporters {
@@ -676,6 +676,7 @@ p {
 }
 
 .ss-supporters-amount {
+  margin: 0 8px;
   font-size: 36px;
 }
 
@@ -683,9 +684,9 @@ p {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: 1;
-  row-gap: 10px;
+  gap: 10px 10px;
   width: 740px;
-  margin: 0 -25px;
+  margin: 0 -22px;
 }
 
 /* kinda cursed but fuck iiit */
@@ -726,7 +727,6 @@ p {
   color: white;
   text-align: center;
   padding-top: 120px;
-  padding-left: 20px;
 }
 
 .ss-countdown {
@@ -1118,6 +1118,7 @@ p {
 #win-player {
   display: flex;
   margin-top: 28px;
+  padding-bottom: 28px;
 }
 
 #win-player-icon img {

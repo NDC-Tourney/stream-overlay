@@ -68,7 +68,7 @@ async function run() {
         }
         return new Response("Upgrade failed", { status: 400 });
       },
-      "/*": index,
+      "/": index,
     },
     websocket: {
       open(ws) {

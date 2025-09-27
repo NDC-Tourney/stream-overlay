@@ -41,7 +41,6 @@ export function StartScreen({ from, to }: StartScreenProps) {
 
   return (
     <div id="main">
-      {/* MainContent */}
       <motion.div
         key={`main-${to}`}
         {...(anims.main === "slide"
@@ -84,7 +83,6 @@ export function StartScreen({ from, to }: StartScreenProps) {
         </MainContent>
       </motion.div>
 
-      {/* FooterContent */}
       <motion.div
         key={`footer-${to}`}
         {...(anims.footer === "slide"
