@@ -15,7 +15,6 @@ body,
 html {
   padding: 0;
   margin: 0;
-  overflow-y: hidden;
   -webkit-font-smoothing: antialiased;
   background-color: #000;
 }
@@ -387,7 +386,6 @@ p {
   padding-top: 14px;
   padding-bottom: 19px;
   width: 610px;
-  height: 137px;
   overflow: hidden;
   text-shadow: 2px 2px 4px #333;
   z-index: 1;
@@ -477,9 +475,9 @@ p {
 }
 
 #casters {
-  position: relative;
   width: 603px;
-  top: 20px;
+  height: 180px;
+  margin-top: 20px;
   font-size: 32px;
   font-family: BenderBlack, Helvetica, sans-serif;
   font-weight: normal;
@@ -1396,7 +1394,6 @@ p {
 }
 
 #scheduling-casters {
-  margin-left: 13px;
-  margin-top: 376px;
-  text-align: center;
+  position: absolute;
+  bottom: 0;
 }

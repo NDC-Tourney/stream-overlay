@@ -15,7 +15,6 @@ body,
 html {
   padding: 0;
   margin: 0;
-  overflow-y: hidden;
   background-color: #0f0321;
   scrollbar-width: thin;
   scrollbar-color: #0f0321 #4c2980;
