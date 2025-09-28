@@ -1,3 +1,5 @@
+import "react";
+
 declare module "*.svg" {
   const path: `${string}.svg`;
   export = path;
@@ -14,4 +16,10 @@ declare module "*.module.css" {
    */
   const classes: { readonly [key: string]: string };
   export = classes;
+}
+
+declare module "react" {
+  interface CSSProperties {
+    [key: `--${string}`]: string | number;
+  }
 }

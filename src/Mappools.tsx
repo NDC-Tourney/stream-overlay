@@ -60,7 +60,10 @@ function ModBracket(
             </div>
           ))}
           <div className={clsx("mappool-map-top", tb)}>
-            <img className={"mappool-map-bg"} src={map.bgUrl} />
+            <div
+              className="mappool-map-bg"
+              style={{ backgroundImage: `url("${map.bgUrl}")` }}
+            />
             <div
               className={`mappool-map-id ${mod}`}
             >{`${map.modBracket}${tb ? "" : map.modBracketIndex}`}</div>
