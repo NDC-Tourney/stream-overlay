@@ -6,26 +6,54 @@ import {
 import { useWebSocket } from "partysocket/react";
 import {
   createContext,
+  use,
   useCallback,
-  useContext,
-  useEffect,
   useState,
   type Dispatch,
   type ReactNode,
   type SetStateAction,
 } from "react";
 
-const DashboardContext = createContext<{
-  settings: DashboardSettings;
-  setSettings: Dispatch<SetStateAction<DashboardSettings>>;
-} | null>(null);
+export const DashboardContext = createContext<
+  [DashboardSettings, Dispatch<SetStateAction<DashboardSettings>>] | null
+>(null);
 
 export function DashboardSettingsProvider({
   children,
 }: {
   children: ReactNode;
 }) {
-  const ws = useWebSocket("ws://localhost:7270/ws");
+  const ws = useWebSocket("ws://localhost:7270/ws", null, {
+    onOpen() {
+      console.log("connected to the dashboard websocket server");
+    },
+
+    onClose() {
+      console.log("disconnected from the dashboard websocket server");
+    },
+
+    onMessage(e) {
+      const { success, data, error } = settingsMessageSchema.safeParse(
+        JSON.parse(e.data),
+      );
+
+      if (success) {
+        _setSettings(data.settings);
+      } else {
+        console.error(
+          "error on parsing settings received from websocket server:",
+          error.message,
+        );
+      }
+    },
+
+    onError(e) {
+      console.error(
+        "error on trying to connect to the dashboard websocket server:",
+        e,
+      );
+    },
+  });
 
   const [settings, _setSettings] = useState<DashboardSettings>({
     matchId: 0,
@@ -58,51 +86,19 @@ export function DashboardSettingsProvider({
     [ws],
   );
 
-  useEffect(() => {
-    ws.addEventListener("open", () => {
-      console.log("connected to the dashboard websocket server");
-    });
-
-    ws.addEventListener("close", () => {
-      console.log("disconnected from the dashboard websocket server");
-    });
-
-    ws.addEventListener("error", (e) => {
-      console.log(
-        "error on trying to connect to the dashboard websocket server:",
-        e.error,
-      );
-    });
-
-    ws.addEventListener("message", (e) => {
-      const { success, data, error } = settingsMessageSchema.safeParse(
-        JSON.parse(e.data),
-      );
-
-      if (success) {
-        _setSettings(data.settings);
-      } else {
-        console.error(
-          "error on parsing settings received from websocket server:",
-          error.message,
-        );
-      }
-    });
-  }, [ws]);
-
   return (
-    <DashboardContext value={{ settings, setSettings }}>
+    <DashboardContext value={[settings, setSettings]}>
       {children}
     </DashboardContext>
   );
 }
 
 export function useSettings() {
-  const context = useContext(DashboardContext);
+  const context = use(DashboardContext);
 
   if (!context) {
     throw new Error("useSettings must only be used within a DashboardProvider");
   }
 
-  return [context.settings, context.setSettings] as const;
+  return context;
 }

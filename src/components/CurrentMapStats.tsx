@@ -15,7 +15,7 @@ export function CurrentMapStats() {
     >
       <div
         className="beatmap-bg current-map-bg"
-        style={{ "--bg": `url("${beatmap.bgUrl}")` }}
+        style={{ "--bg": beatmap.bgUrl ? `url("${beatmap.bgUrl}")` : "" }}
       ></div>
       <div id="current-map-info">
         <div id="current-map-name">{beatmap.title}</div>

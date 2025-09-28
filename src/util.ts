@@ -13,7 +13,7 @@ export function getAvatarUrl(userId: number | string) {
 
 export function getBeatmapBgUrl(setId?: number) {
   if (!setId) {
-    return "";
+    return null;
   }
 
   return `https://assets.ppy.sh/beatmaps/${setId}/covers/cover.jpg`;

@@ -1,4 +1,4 @@
-import { createRoot } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
 import { App } from "./App";
 import { StrictMode } from "react";
 import "./dayjs";
@@ -10,7 +10,7 @@ function start() {
     throw "root element missing";
   }
 
-  const root = (import.meta.hot.data.root ??= createRoot(rootEl));
+  const root: Root = (import.meta.hot.data.root ??= createRoot(rootEl));
   root.render(
     <StrictMode>
       <App />
