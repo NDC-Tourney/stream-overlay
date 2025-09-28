@@ -13,7 +13,10 @@ export function CurrentMapStats() {
         [`current-map-picked-${settings.lastPickedBy}`]: settings.lastPickedBy,
       })}
     >
-      <img id="beatmap-background" src={beatmap.bgUrl}></img>
+      <div
+        className="beatmap-bg current-map-bg"
+        style={{ "--bg": `url("${beatmap.bgUrl}")` }}
+      ></div>
       <div id="current-map-info">
         <div id="current-map-name">{beatmap.title}</div>
         <div id="current-map-artist">{beatmap.artist}</div>

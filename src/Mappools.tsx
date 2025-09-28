@@ -61,8 +61,8 @@ function ModBracket(
           ))}
           <div className={clsx("mappool-map-top", tb)}>
             <div
-              className="mappool-map-bg"
-              style={{ backgroundImage: `url("${map.bgUrl}")` }}
+              className="beatmap-bg"
+              style={{ "--bg": `url("${map.bgUrl}")` }}
             />
             <div
               className={`mappool-map-id ${mod}`}
