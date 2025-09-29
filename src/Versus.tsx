@@ -9,6 +9,7 @@ import { HeaderContent } from "./components/HeaderContent";
 import { FooterContent } from "./components/FooterContent";
 import { PlayerInfo } from "./components/PlayerInfo";
 import { ScoreBars } from "./components/ScoreBars";
+import { GameplaySvgMask } from "./components/GameplayTransparencyMask";
 
 interface VersusScreenProps {
   from?: string;
@@ -22,7 +23,8 @@ export function VersusScreen({ from, to }: VersusScreenProps) {
   const slideDirection: 1 | -1 = 1;
   return (
     <div>
-      <div id="main">
+      <GameplaySvgMask />
+      <div id="main" className="no-background">
         <motion.div
           key={`header-${to}`}
           {...(anims.header === "slide"
