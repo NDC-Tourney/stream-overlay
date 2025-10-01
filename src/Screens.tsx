@@ -1,13 +1,25 @@
 import { AnimatePresence } from "framer-motion";
-import { StartScreen } from "./Startscreen";
-import { StandbyScreen } from "./Standby";
-import { VersusScreen } from "./Versus";
 import { MappoolScreen } from "./Mappools";
 import { SchedulingScreen } from "./Scheduling";
+import { StandbyScreen } from "./Standby";
+import { StartScreen } from "./Startscreen";
+import { VersusScreen } from "./Versus";
 import { WinnerScreen } from "./Winner";
 import { useSettings } from "./state/dashboard";
+import {
+  useMappoolQuery,
+  useMatchesQuery,
+  useScheduleQuery,
+  useTournamentQuery,
+} from "./state/huis";
 
 export function Screens() {
+  // prefetching
+  useMatchesQuery();
+  useMappoolQuery();
+  useTournamentQuery();
+  useScheduleQuery();
+
   const [settings] = useSettings();
   const activeScreen = settings.activeScreen;
   const previous = settings.previousScreen;

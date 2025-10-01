@@ -1,8 +1,8 @@
 import { screenNames, type ScreenName } from "@/schemas/screens";
 import { useSettings } from "@/state/dashboard";
 import {
-  useCurrentMatchesQuery,
   useMappoolQuery,
+  useMatchesQuery,
   useScheduleQuery,
   type Match,
 } from "@/state/huis";
@@ -11,14 +11,14 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { produce } from "immer";
 
 export function Dashboard() {
-  const { data: matches } = useCurrentMatchesQuery();
+  const { matches } = useMatchesQuery();
   const { data: schedule } = useScheduleQuery();
   const [settings, setSettings] = useSettings();
   const autoselect = settings.automaticSelect;
 
   // default to the next upcoming match on startup
   useEffect(() => {
-    if (!settings.matchId && schedule.upcoming[0]) {
+    if (!settings.matchId && schedule.upcoming[0]?.uid) {
       const nextMatch = schedule.upcoming[0].uid;
       setSettings((settings) => ({ ...settings, matchId: nextMatch }));
     }
@@ -107,7 +107,7 @@ export function Dashboard() {
     );
     pickOrBan === "picks"
       ? setPicksSelection("Confirmed!")
-      : setBansSelection("Confirmed");
+      : setBansSelection("Confirmed!");
   };
 
   const handleCountdownDateChange = (

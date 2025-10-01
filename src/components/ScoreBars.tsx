@@ -1,10 +1,8 @@
-import { useMatchQuery } from "@/state/huis";
 import { useTosu } from "@/state/tosu";
 import { StageInfo } from "./StageInfo";
 
 export function ScoreBars() {
   const { player1, player2 } = useTosu();
-  const { roundName, bracket } = useMatchQuery();
 
   const maxScore = player1.score + player2.score;
   const maxBarWidth = 600;

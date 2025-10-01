@@ -1,12 +1,12 @@
-import index from "./index.html";
+import type { HTMLBundle } from "bun";
+import { parseArgs } from "util";
 import dashboard from "./dashboard/dashboard.html";
+import index from "./index.html";
 import {
   settingsMessageSchema,
   type SettingsMessage,
 } from "./schemas/settings";
 import { isProduction } from "./util";
-import { parseArgs } from "util";
-import type { HTMLBundle } from "bun";
 
 const args = parseArgs({
   args: process.argv,

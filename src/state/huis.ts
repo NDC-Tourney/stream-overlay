@@ -1,9 +1,9 @@
 import { getAvatarUrl, getBeatmapBgUrl, type WithRequired } from "@/util";
 import { useQuery } from "@tanstack/react-query";
 
+import dayjs from "dayjs";
 import { z } from "zod";
 import { useSettings } from "./dashboard";
-import dayjs from "dayjs";
 
 const zodBinaryToBoolean = z
   .number()
@@ -157,7 +157,10 @@ const matchesSchema = z
       .toSorted((a, b) => Number(a.date) - Number(b.date)),
   );
 
-export type Match = z.infer<typeof matchSchema>;
+export type Match = WithRequired<
+  Partial<z.infer<typeof matchSchema>>,
+  "player1" | "player2" | "uid"
+>;
 
 export type Player = Match["player1"];
 
@@ -182,71 +185,60 @@ async function fetchMatches(round: string = "current-week") {
 
 const TOURNEY_ID = "31"; // TODO: add tourney selection
 
-export function useCurrentMatchesQuery() {
-  return useQuery({
+export function useMatchesQuery() {
+  const {
+    data: matches,
+    error,
+    isPending,
+  } = useQuery({
     queryKey: ["huis", { tournament: TOURNEY_ID, type: "current_matches" }],
     queryFn: () => fetchMatches(),
   });
-}
 
-export function useMatchQuery(): WithRequired<
-  Partial<Match>,
-  "roundName" | "bracket" | "player1" | "player2"
-> {
-  const { data: matches, error, isPending } = useCurrentMatchesQuery();
-  const [settings] = useSettings();
-  const matchId = settings.matchId;
   const defaultAvatarUrl = getAvatarUrl("");
 
-  if (isPending) {
-    return {
-      roundName: "???",
-      bracket: "???",
-      player1: {
-        name: "???",
-        avatarUrl: defaultAvatarUrl,
-        seed: 0,
-        supporters: [],
-        pickemsRate: "0.00",
-      },
-      player2: {
-        name: "???",
-        avatarUrl: defaultAvatarUrl,
-        seed: 0,
-        supporters: [],
-        pickemsRate: "0.00",
-      },
-    };
-  }
+  const defaultPlayer: Player = {
+    name: "???",
+    avatarUrl: defaultAvatarUrl,
+    seed: 0,
+    supporters: [],
+    pickemsRate: "0.00",
+    winner: false,
+    osuId: 0,
+    score: 0,
+  };
 
-  const match = matches?.find((m) => m.uid === matchId);
+  const defaultCurrentMatch: Match = {
+    uid: 0,
+    roundName: "???",
+    bracket: "???",
+    player1: defaultPlayer,
+    player2: defaultPlayer,
+  };
 
-  if (!match) {
-    return {
-      roundName: "Unknown round",
-      bracket: "???",
-      player1: {
-        name: "Unknown player",
-        avatarUrl: defaultAvatarUrl,
-        seed: 0,
-        supporters: [],
-        pickemsRate: "0.00",
-      },
-      player2: {
-        name: "Unknown player",
-        avatarUrl: defaultAvatarUrl,
-        seed: 0,
-        supporters: [],
-        pickemsRate: "0.00",
-      },
-    };
-  }
+  const unknownPlayer: Player = {
+    ...defaultPlayer,
+    name: "Unknown player",
+  };
+
+  const unknownCurrentMatch: Match = {
+    ...defaultCurrentMatch,
+    roundName: "Unknown round",
+    player1: unknownPlayer,
+    player2: unknownPlayer,
+  };
+
+  const [{ matchId }] = useSettings();
+  const currentMatch =
+    isPending || !matchId
+      ? defaultCurrentMatch
+      : (matches?.find((m) => m.uid === matchId) ?? unknownCurrentMatch);
 
   if (error) {
     console.error(error);
   }
 
-  return match;
+  return { currentMatch, matches };
 }
 
 const tournamentSchema = z.object({
@@ -322,7 +314,9 @@ export type Mappool = z.infer<typeof mappoolSchema>;
 
 export type Beatmap = Mappool[number];
 
-async function fetchMappool(tourneyId: string, roundAbbr: string) {
+async function fetchMappool(tourneyId: string, roundAbbr?: string) {
+  console.assert(roundAbbr, "roundAbbr is undefined (wtf)");
+
   console.log("fetching mappool");
   const response = await fetch(
     `https://api.tourney.huismetbenen.nl/mappools/get/${roundAbbr}`,
@@ -342,7 +336,8 @@ async function fetchMappool(tourneyId: string, roundAbbr: string) {
 }
 
 export function useMappoolQuery() {
-  const { roundAbbr } = useMatchQuery();
+  const { currentMatch } = useMatchesQuery();
+  const roundAbbr = currentMatch?.roundAbbr;
 
   const { data: mappool } = useQuery({
     enabled: !!roundAbbr,
@@ -350,7 +345,7 @@ export function useMappoolQuery() {
       "huis",
       { tournament: TOURNEY_ID, type: "mappool", round: roundAbbr },
     ],
-    queryFn: () => (roundAbbr ? fetchMappool(TOURNEY_ID, roundAbbr) : []),
+    queryFn: () => fetchMappool(TOURNEY_ID, roundAbbr),
   });
 
   const mappoolGrouped: Record<Beatmap["modBracket"], Beatmap[]> = {
@@ -386,25 +381,37 @@ async function fetchTournament() {
   return tournamentSchema.parse(data);
 }
 
-export function useScheduleQuery() {
-  const tournament = useQuery({
+export function useTournamentQuery() {
+  return useQuery({
     queryKey: ["huis", { tournament: TOURNEY_ID }],
     queryFn: fetchTournament,
   });
+}
+
+function useCurrentRoundMatchesQuery(currentRoundAcronym?: string) {
+  return useQuery({
+    enabled: !!currentRoundAcronym,
+    queryKey: [
+      "huis",
+      {
+        tournament: TOURNEY_ID,
+        type: "round_matches",
+        round: currentRoundAcronym,
+      },
+    ],
+    queryFn: () => fetchMatches(currentRoundAcronym),
+  });
+}
+
+export function useScheduleQuery() {
+  const tournament = useTournamentQuery();
 
   const now = new Date();
   const currentRound = tournament.data?.rounds.find(
     (round) => Number(round.endDate) > Number(now),
   );
 
-  const matches = useQuery({
-    enabled: !!currentRound?.acronym,
-    queryKey: [
-      "huis",
-      { tournament: TOURNEY_ID, type: "round_matches", round: currentRound },
-    ],
-    queryFn: () => fetchMatches(currentRound?.acronym),
-  });
+  const matches = useCurrentRoundMatchesQuery(currentRound?.acronym);
 
   if (!matches.data) {
     return {

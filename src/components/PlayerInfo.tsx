@@ -1,15 +1,15 @@
-import { useMatchQuery } from "@/state/huis";
+import { useMatchesQuery } from "@/state/huis";
 import { useTosu } from "@/state/tosu";
 import clsx from "clsx";
 
 export function PlayerInfo({ playerNum }: { playerNum: 1 | 2 }) {
   const { tourney } = useTosu();
-  const match = useMatchQuery();
+  const { currentMatch } = useMatchesQuery();
 
   const [player, team, side] =
     playerNum === 1
-      ? ([match.player1, "red", "left"] as const)
-      : ([match.player2, "blue", "right"] as const);
+      ? ([currentMatch.player1, "red", "left"] as const)
+      : ([currentMatch.player2, "blue", "right"] as const);
   const maxPoints = Math.ceil(tourney.bestOf / 2);
   const points = Array.from({ length: maxPoints }, (_, i) => (
     <div

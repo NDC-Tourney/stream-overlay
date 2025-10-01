@@ -1,4 +1,4 @@
-import { VelopackApp, UpdateManager } from "velopack";
+import { UpdateManager, VelopackApp } from "velopack";
 
 let currentVersion;
 

@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
-import { sectionVariants, getAnimations } from "./animations";
 import type { AnimTypes } from "./animations";
-import { PlayerInfo } from "./components/PlayerInfo";
-import { Chat } from "./components/Chat";
-import { Logo } from "./components/Logo";
+import { getAnimations, sectionVariants } from "./animations";
 import { Casters } from "./components/Casters";
-import { StageInfo } from "./components/StageInfo";
-import { MainContent } from "./components/MainContent";
-import { HeaderContent } from "./components/HeaderContent";
+import { Chat } from "./components/Chat";
 import { FooterContent } from "./components/FooterContent";
 import { GameplaySvgMask } from "./components/GameplayTransparencyMask";
+import { HeaderContent } from "./components/HeaderContent";
+import { Logo } from "./components/Logo";
+import { MainContent } from "./components/MainContent";
+import { PlayerInfo } from "./components/PlayerInfo";
+import { StageInfo } from "./components/StageInfo";
 
 interface StandbyScreenProps {
   from?: string;

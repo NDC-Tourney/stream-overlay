@@ -1,7 +1,8 @@
-import { useMatchQuery } from "@/state/huis";
+import { useMatchesQuery } from "@/state/huis";
 
 export function StageInfo() {
-  const { roundName, bracket } = useMatchQuery();
+  const { currentMatch } = useMatchesQuery();
+  const { roundName, bracket } = currentMatch;
 
   return (
     <div id="stage-info">

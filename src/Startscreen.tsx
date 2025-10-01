@@ -1,16 +1,16 @@
 import { motion } from "framer-motion";
-import { sectionVariants, getAnimations } from "./animations";
-import type { AnimTypes } from "./animations";
-import { useMatchQuery } from "./state/huis";
-import { Chat } from "./components/Chat";
-import { Logo } from "./components/Logo";
-import { Casters } from "./components/Casters";
-import { MainContent } from "./components/MainContent";
-import { FooterContent } from "./components/FooterContent";
 import Countdown, { zeroPad } from "react-countdown";
-import { useSettings } from "./state/dashboard";
+import type { AnimTypes } from "./animations";
+import { getAnimations, sectionVariants } from "./animations";
+import { Casters } from "./components/Casters";
+import { Chat } from "./components/Chat";
+import { FooterContent } from "./components/FooterContent";
+import { Logo } from "./components/Logo";
+import { MainContent } from "./components/MainContent";
 import { PlayerCard } from "./components/PlayerCard";
 import SupportersAvatars from "./components/SupportersAvatars";
+import { useSettings } from "./state/dashboard";
+import { useMatchesQuery } from "./state/huis";
 
 interface StartScreenProps {
   from?: string;
@@ -30,7 +30,9 @@ const renderer = ({
 );
 
 export function StartScreen({ from, to }: StartScreenProps) {
-  const { player1, player2, ...match } = useMatchQuery();
+  const {
+    currentMatch: { player1, player2, ...match },
+  } = useMatchesQuery();
   const [settings] = useSettings();
   // treat this component as self (to) and other as from
   const anims: AnimTypes = getAnimations(to, from ?? "");

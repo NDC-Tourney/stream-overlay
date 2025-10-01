@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { sectionVariants, getAnimations } from "./animations";
 import type { AnimTypes } from "./animations";
 import dayjs from "dayjs";
-import { useMatchQuery, useScheduleQuery } from "./state/huis";
+import { useMatchesQuery, useScheduleQuery } from "./state/huis";
 import logo from "./static/img/logo.png";
 import clsx from "clsx";
 import { MainContent } from "./components/MainContent";
@@ -19,7 +19,8 @@ export function SchedulingScreen({ from, to }: SchedulingScreenProps) {
 
   const slideDirection: 1 | -1 = 1;
 
-  const { roundName } = useMatchQuery();
+  const { currentMatch } = useMatchesQuery();
+  const roundName = currentMatch.roundName;
   const { data: schedule, error, isPending } = useScheduleQuery();
 
   return (
