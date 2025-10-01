@@ -7,6 +7,7 @@ import logo from "./static/img/logo.png";
 import clsx from "clsx";
 import { MainContent } from "./components/MainContent";
 import { Casters } from "./components/Casters";
+import { useTosu } from "./state/tosu";
 
 interface SchedulingScreenProps {
   from?: string;
@@ -22,6 +23,8 @@ export function SchedulingScreen({ from, to }: SchedulingScreenProps) {
   const { currentMatch } = useMatchesQuery();
   const roundName = currentMatch.roundName;
   const { data: schedule, error, isPending } = useScheduleQuery();
+
+  const { tourney } = useTosu();
 
   return (
     <div id="main-scheduling">
@@ -39,68 +42,83 @@ export function SchedulingScreen({ from, to }: SchedulingScreenProps) {
               <div id="schedule-upcoming">
                 <div id="schedule-upcoming-text">Upcoming Matches</div>
                 <div id="upcoming-matches">
-                  {schedule.upcoming.map((match) => (
-                    <div className="match" key={match.uid}>
-                      <div className="match-info">
-                        <div className="match-red-player">
-                          <div className="match-red-player-icon">
-                            <img src={match.player1.avatarUrl} />
+                  {schedule.upcoming.map((match) => {
+                    if (
+                      match.uid === currentMatch.uid &&
+                      (tourney.points.left > 0 || tourney.points.right > 0)
+                    ) {
+                      const totalPoints = Math.ceil(tourney.bestOf / 2);
+                      match.player1.score = tourney.points.left;
+                      match.player1.winner =
+                        tourney.points.left === totalPoints;
+                      match.player2.score = tourney.points.right;
+                      match.player2.winner =
+                        tourney.points.right === totalPoints;
+                    }
+
+                    return (
+                      <div className="match" key={match.uid}>
+                        <div className="match-info">
+                          <div className="match-red-player">
+                            <div className="match-red-player-icon">
+                              <img src={match.player1.avatarUrl} />
+                            </div>
+                            <div className="match-player-name">
+                              {match.player1.name ?? "Unknown player"}
+                            </div>
+                            <div
+                              className={clsx(
+                                "match-box",
+                                match.player1.winner && "win",
+                              )}
+                            >
+                              <div className="match-score">
+                                {match.player1.score}
+                              </div>
+                            </div>
                           </div>
-                          <div className="match-player-name">
-                            {match.player1.name ?? "Unknown player"}
+                          <div className="match-vs">
+                            <div className="divider"></div>
+                            <div className="match-vs-text">VS</div>
+                            <div className="divider"></div>
                           </div>
-                          <div
-                            className={clsx(
-                              "match-box",
-                              match.player1.winner && "win",
-                            )}
-                          >
-                            <div className="match-score">
-                              {match.player1.score}
+                          <div className="match-blue-player">
+                            <div className="match-blue-player-icon">
+                              <img src={match.player2.avatarUrl} />
+                            </div>
+                            <div className="match-player-name">
+                              {match.player2.name ?? "Unknown player"}
+                            </div>
+                            <div
+                              className={clsx(
+                                "match-box",
+                                match.player2.winner && "win",
+                              )}
+                            >
+                              <div className="match-score">
+                                {match.player2.score}
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div className="match-vs">
-                          <div className="divider"></div>
-                          <div className="match-vs-text">VS</div>
-                          <div className="divider"></div>
-                        </div>
-                        <div className="match-blue-player">
-                          <div className="match-blue-player-icon">
-                            <img src={match.player2.avatarUrl} />
+                        <div className="match-time">
+                          <div className="match-until">
+                            {dayjs(match.date).fromNow()}
                           </div>
-                          <div className="match-player-name">
-                            {match.player2.name ?? "Unknown player"}
-                          </div>
-                          <div
-                            className={clsx(
-                              "match-box",
-                              match.player2.winner && "win",
-                            )}
-                          >
-                            <div className="match-score">
-                              {match.player2.score}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="match-time">
-                        <div className="match-until">
-                          {dayjs(match.date).fromNow()}
-                        </div>
-                        <div className="match-timestamp">
-                          {dayjs(match.date)
-                            .tz("Europe/Amsterdam")
-                            .format("dddd HH:mm")}
-                          <span className="match-timestamp-tz">
+                          <div className="match-timestamp">
                             {dayjs(match.date)
                               .tz("Europe/Amsterdam")
-                              .format("z")}
-                          </span>
+                              .format("dddd HH:mm")}
+                            <span className="match-timestamp-tz">
+                              {dayjs(match.date)
+                                .tz("Europe/Amsterdam")
+                                .format("z")}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
               <div id="schedule-previous">
