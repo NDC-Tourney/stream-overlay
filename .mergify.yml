@@ -51,3 +51,5 @@ merge_protections:
           - closed
           - label = skip-review
           - "#approved-reviews-by >= 1"
+merge_queue:
+  max_parallel_checks: 1
