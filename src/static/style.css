@@ -859,7 +859,7 @@ p {
   width: 253px;
   height: 138px;
   border-radius: 15px 0px;
-  mask-image: radial-gradient(100% 100% at 50% 0%, #1a1a55 0%, #18182f 100%);
+  overflow: hidden;
 }
 
 .mappool-map.nm {
@@ -894,6 +894,8 @@ p {
   transition: opacity 0.5s ease;
   pointer-events: none;
   z-index: 1;
+  overflow: clip;
+  overflow-clip-margin: 1px;
 }
 
 .picked-indicator-player1 {
@@ -921,6 +923,8 @@ p {
   transition: opacity 0.5s ease;
   pointer-events: none;
   z-index: 1;
+  overflow: clip;
+  overflow-clip-margin: 1px;
 }
 
 .picked-indicator-player2 {
@@ -947,6 +951,9 @@ p {
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
+  z-index: 1;
+  overflow: clip;
+  overflow-clip-margin: 1px;
 }
 
 .picked-indicator-tb {
@@ -966,7 +973,7 @@ p {
 }
 
 .picked-active {
-  opacity: 1 !important;
+  opacity: 1;
 }
 
 .picked-active .picked-indicator-player1,
