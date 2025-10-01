@@ -9,7 +9,7 @@ queue_rules:
               - "#approved-reviews-by >= 1"
               - "#changes-requested-reviews-by = 0"
           - label = skip-review
-    branch_protection_injection_mode: merge
+    branch_protection_injection_mode: queue
 merge_protections_settings:
   post_comment: false
 pull_request_rules:
