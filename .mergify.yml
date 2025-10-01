@@ -3,6 +3,7 @@ queue_rules:
     autoqueue: true
     name: merge queue
     queue_conditions:
+      - base = master
       - or:
           - and:
               - "#approved-reviews-by >= 1"
