@@ -1,7 +1,7 @@
-import type { Player } from "@/state/huis";
-import { PlayerAvatar } from "./PlayerAvatar";
+import type { Player } from "@/schemas/huis";
 import { getAvatarUrl } from "@/util";
 import clsx from "clsx";
+import { PlayerAvatar } from "./PlayerAvatar";
 
 type Props = {
   player: Player;

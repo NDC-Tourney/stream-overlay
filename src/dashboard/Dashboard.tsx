@@ -1,14 +1,14 @@
+import type { Match } from "@/schemas/huis";
 import { screenNames, type ScreenName } from "@/schemas/screens";
 import { useSettings } from "@/state/dashboard";
 import {
   useMappoolQuery,
   useMatchesQuery,
   useScheduleQuery,
-  type Match,
 } from "@/state/huis";
 import dayjs from "dayjs";
-import { useState, useRef, useEffect, useMemo } from "react";
 import { produce } from "immer";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export function Dashboard() {
   const { matches } = useMatchesQuery();

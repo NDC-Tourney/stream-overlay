@@ -2,7 +2,6 @@ import z from "zod";
 import { screenNameSchema } from "./screens";
 
 export const playerSchema = z.literal(["player1", "player2"]);
-export type Player = z.infer<typeof playerSchema>;
 
 export const playerSettingsSchema = z.object({
   bans: z.array(z.string()),
