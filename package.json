@@ -1,22 +1,21 @@
 {
   "name": "ndc-stream-overlay",
-  "version": "0.0.0-placeholder",
+  "version": "1.8.0",
   "type": "module",
   "scripts": {
     "dev": "bun --hot --console-depth=0 src/main.ts",
     "start": "NODE_ENV=production bun src/main.ts",
     "build": "bun run build.ts",
-    "cut-release": "nbgv prepare-release",
     "prepare-pack:win": "vpk download github --repoUrl https://github.com/NDC-Tourney/stream-overlay -c win",
     "prepare-pack:linux": "vpk download github --repoUrl https://github.com/NDC-Tourney/stream-overlay -c linux",
     "prepare-pack": "bun run prepare-pack:win && bun run prepare-pack:linux",
-    "pack:win": "vpk [win] pack -u NDC.StreamOverlay -v $(nbgv get-version -v semver2) -p dist/win -e ndc-stream-overlay.exe",
-    "pack:linux": "vpk [linux] pack -u NDC.StreamOverlay -v $(nbgv get-version -v semver2) -p dist/linux -e ndc-stream-overlay",
+    "pack:win": "vpk [win] pack -y -u NDC.StreamOverlay -v $(bun pm pkg get version | jq -r) -p dist/win -e ndc-stream-overlay.exe",
+    "pack:linux": "vpk [linux] pack -y -u NDC.StreamOverlay -v $(bun pm pkg get version | jq -r) -p dist/linux -e ndc-stream-overlay",
     "pack": "bun run pack:win && bun run pack:linux",
-    "upload-release:win": "vpk upload github --repoUrl https://github.com/ndc-tourney/stream-overlay --publish --tag v$(nbgv get-version -v semver2) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c win",
-    "upload-release:linux": "vpk upload github --repoUrl https://github.com/ndc-tourney/stream-overlay --publish --tag v$(nbgv get-version -v semver2) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c linux --merge",
+    "upload-release:win": "vpk upload github --repoUrl https://github.com/ndc-tourney/stream-overlay --publish --tag $(git describe --tags) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c win",
+    "upload-release:linux": "vpk upload github --repoUrl https://github.com/ndc-tourney/stream-overlay --publish --tag $(git describe --tags) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c linux --merge",
     "upload-release": "bun run upload-release:win && bun run upload-release:linux",
-    "full-release-process": "bun run cut-release && git prev -n && git push && bun run build && bun run prepare-pack && bun run pack && bun run upload-release && git sw master && git push"
+    "full-release-process": "git push && git push --tags && bun run build && bun run prepare-pack && bun run pack && bun run upload-release"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.2",
