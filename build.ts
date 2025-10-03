@@ -14,11 +14,6 @@ console.log("build time:", new Date(buildTime), buildTime);
 const gitCommit = await $`git rev-parse HEAD`.text().then((s) => s.trim());
 console.log("git commit:", gitCommit);
 
-const remoteUrl =
-  await $`git config --get remote.origin.url | sed -e 's/:/\//g'| sed -e 's/ssh\/\/\///g'| sed -e 's/git@/https:\/\//g'`.text();
-const repoUrl = await Bun.fetch(remoteUrl).then((response) => response.url);
-console.log("repo URL:", repoUrl);
-
 const stringifyValues = (obj: Record<string, JSONType>) => {
   const newObj: Record<string, string> = {};
   for (const key in obj) {
@@ -55,7 +50,6 @@ for (const [platform, target] of Object.entries(targets)) {
       BUILD_TIME: buildTime,
       BUILD_TIME_ETAG: buildTimeEtag,
       GIT_COMMIT: gitCommit,
-      REPO_URL: repoUrl,
     }),
     compile: {
       target,

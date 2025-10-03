@@ -22,9 +22,16 @@ export const settingsSchema = z.object({
 
 export type DashboardSettings = z.infer<typeof settingsSchema>;
 
-export const settingsMessageSchema = z.object({
-  type: z.literal("SETTINGS"),
-  settings: settingsSchema,
-});
+export const dashboardMessageSchema = z
+  .object({
+    type: z.literal("SETTINGS"),
+    settings: settingsSchema,
+  })
+  .or(
+    z.object({
+      type: z.literal("HELLO"),
+      gitCommit: z.string().optional(),
+    }),
+  );
 
-export type SettingsMessage = z.infer<typeof settingsMessageSchema>;
+export type DashboardMessage = z.infer<typeof dashboardMessageSchema>;

@@ -3,8 +3,8 @@ import { parseArgs } from "util";
 import dashboard from "./dashboard/dashboard.html";
 import index from "./index.html";
 import {
-  settingsMessageSchema,
-  type SettingsMessage,
+  dashboardMessageSchema,
+  type DashboardMessage,
 } from "./schemas/settings";
 import { isProduction } from "./util";
 
@@ -45,10 +45,8 @@ async function overrideHtmlEtags(htmlFiles: HTMLBundle[], value: string) {
   );
 }
 
-declare var BUILD_TIME_ETAG: string;
-
 async function run() {
-  let lastSettings: SettingsMessage | null = null;
+  let lastMessage: DashboardMessage | null = null;
 
   // Bun.build does not seem to change the etag header on changing the hash part
   // of asset filenames because the content of the original HTML file didn't
@@ -74,8 +72,18 @@ async function run() {
       open(ws) {
         console.log(`client has connected`);
         ws.subscribe("settings");
-        if (lastSettings) {
-          ws.send(JSON.stringify(lastSettings));
+
+        if (typeof GIT_COMMIT !== "undefined") {
+          ws.send(
+            JSON.stringify({
+              type: "HELLO",
+              gitCommit: GIT_COMMIT,
+            } satisfies DashboardMessage),
+          );
+        }
+
+        if (lastMessage) {
+          ws.send(JSON.stringify(lastMessage satisfies DashboardMessage));
         }
       },
       close(ws) {
@@ -84,11 +92,11 @@ async function run() {
       },
       message(ws, message) {
         try {
-          const parsedMessage = settingsMessageSchema.parse(
+          const parsedMessage = dashboardMessageSchema.parse(
             JSON.parse(message.toString()),
           );
           ws.publish("settings", JSON.stringify(parsedMessage));
-          lastSettings = parsedMessage;
+          lastMessage = parsedMessage;
         } catch (e) {
           console.error(
             "failed to forward settings sent by either overlay or dashboard:",

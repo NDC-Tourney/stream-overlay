@@ -1,7 +1,7 @@
 import {
-  settingsMessageSchema,
+  dashboardMessageSchema,
   type DashboardSettings,
-  type SettingsMessage,
+  type DashboardMessage,
 } from "@/schemas/settings";
 import { useWebSocket } from "partysocket/react";
 import {
@@ -33,12 +33,23 @@ export function DashboardSettingsProvider({
     },
 
     onMessage(e) {
-      const { success, data, error } = settingsMessageSchema.safeParse(
+      const { success, data, error } = dashboardMessageSchema.safeParse(
         JSON.parse(e.data),
       );
 
       if (success) {
-        _setSettings(data.settings);
+        if (
+          data.type === "HELLO" &&
+          typeof GIT_COMMIT !== "undefined" &&
+          GIT_COMMIT !== data.gitCommit
+        ) {
+          console.warn("version mismatch detected! reloading client...");
+          window.location.reload();
+        }
+
+        if (data.type === "SETTINGS") {
+          _setSettings(data.settings);
+        }
       } else {
         console.error(
           "error on parsing settings received from websocket server:",
@@ -75,7 +86,7 @@ export function DashboardSettingsProvider({
       _setSettings((currentSettings) => {
         const nextState =
           typeof update === "function" ? update(currentSettings) : update;
-        const message: SettingsMessage = {
+        const message: DashboardMessage = {
           type: "SETTINGS",
           settings: nextState,
         };

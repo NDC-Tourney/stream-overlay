@@ -21,3 +21,7 @@ declare namespace React {
     [key: `--${string}`]: string | number;
   }
 }
+
+declare var BUILD_TIME_ETAG: string;
+
+declare var GIT_COMMIT: string;
