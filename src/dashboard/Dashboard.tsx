@@ -12,7 +12,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 export function Dashboard() {
   const { matches } = useMatchesQuery();
-  const { data: schedule } = useScheduleQuery();
+  const schedule = useScheduleQuery();
   const [settings, setSettings] = useSettings();
   const autoselect = settings.automaticSelect;
 

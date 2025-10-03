@@ -8,9 +8,8 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       experimental_prefetchInRender: true,
-      staleTime: 1000 * 60,
-      gcTime: 1000 * 60 * 10,
-      throwOnError: true,
+      staleTime: 0,
+      retry: true,
     },
   },
 });

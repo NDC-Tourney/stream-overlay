@@ -22,7 +22,7 @@ export function SchedulingScreen({ from, to }: SchedulingScreenProps) {
 
   const { currentMatch } = useMatchesQuery();
   const roundName = currentMatch.roundName;
-  const { data: schedule, error, isPending } = useScheduleQuery();
+  const schedule = useScheduleQuery();
 
   const { tourney } = useTosu();
 
