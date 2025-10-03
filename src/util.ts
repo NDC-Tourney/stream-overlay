@@ -11,12 +11,21 @@ export function getAvatarUrl(userId: number | string) {
   return `https://a.ppy.sh/${userId}`;
 }
 
-export function getBeatmapBgUrl(setId?: number) {
-  if (!setId) {
-    return null;
-  }
-
+export function getBeatmapBgUrl(setId: number) {
   return `https://assets.ppy.sh/beatmaps/${setId}/covers/cover.jpg`;
 }
 
 export const isProduction = process.env.NODE_ENV === "production";
+
+const preloaded = new Set();
+
+export function preloadImage(url: string) {
+  if (preloaded.has(url)) {
+    return;
+  }
+
+  preloaded.add(url);
+  const img = new Image();
+  img.fetchPriority = "low";
+  img.src = url;
+}

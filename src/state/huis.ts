@@ -1,4 +1,4 @@
-import { getAvatarUrl } from "@/util";
+import { getAvatarUrl, preloadImage } from "@/util";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -26,7 +26,7 @@ async function fetchAndParse<T extends ZodType>(
   console.log(`fetching ${url}`);
 
   const response = await fetch(`https://api.tourney.huismetbenen.nl/${url}`, {
-    headers: { "x-tourney-id": TOURNEY_ID },
+    headers: { "x-tourney-id": TOURNAMENT_ID },
   });
 
   if (!response.ok) {
@@ -43,7 +43,7 @@ async function fetchMatches(round: string = "current-week") {
   return fetchAndParse(`matches/list/${round}`, matchesSchema);
 }
 
-const TOURNEY_ID = "31"; // TODO: add tourney selection
+const TOURNAMENT_ID = "31"; // TODO: add tournament selection
 
 export function useMatchesQuery() {
   const {
@@ -51,10 +51,7 @@ export function useMatchesQuery() {
     error,
     isPending,
   } = useQuery({
-    queryKey: [
-      "huis",
-      { tournament: TOURNEY_ID, type: "matches", round: "current-week" },
-    ],
+    queryKey: ["huis", "matches", "current-week"],
     queryFn: () => fetchMatches(),
   });
 
@@ -101,6 +98,9 @@ export function useMatchesQuery() {
     console.error(error);
   }
 
+  preloadImage(currentMatch.player1.avatarUrl);
+  preloadImage(currentMatch.player2.avatarUrl);
+
   return { currentMatch, matches };
 }
 
@@ -114,10 +114,7 @@ export function useMappoolQuery() {
 
   const { data: mappool, error } = useQuery({
     enabled: !!roundAbbr,
-    queryKey: [
-      "huis",
-      { tournament: TOURNEY_ID, type: "mappool", round: roundAbbr },
-    ],
+    queryKey: ["huis", "mappool", roundAbbr],
     queryFn: () => {
       console.assert(roundAbbr, "roundAbbr is undefined (wtf)");
       return fetchMappool(roundAbbr);
@@ -137,6 +134,7 @@ export function useMappoolQuery() {
   };
 
   for (const beatmap of mappool ?? []) {
+    preloadImage(beatmap.bgUrl);
     mappoolGrouped[beatmap.modBracket].push(beatmap);
   }
 
@@ -146,12 +144,12 @@ export function useMappoolQuery() {
 }
 
 async function fetchTournament() {
-  return fetchAndParse(`tournament/get/${TOURNEY_ID}`, tournamentSchema);
+  return fetchAndParse(`tournament/get/${TOURNAMENT_ID}`, tournamentSchema);
 }
 
 export function useTournamentQuery() {
   return useQuery({
-    queryKey: ["huis", { tournament: TOURNEY_ID }],
+    queryKey: ["huis", "tournament", TOURNAMENT_ID],
     queryFn: fetchTournament,
   });
 }
@@ -159,14 +157,7 @@ export function useTournamentQuery() {
 function useCurrentRoundMatchesQuery(currentRoundAcronym?: string) {
   return useQuery({
     enabled: !!currentRoundAcronym,
-    queryKey: [
-      "huis",
-      {
-        tournament: TOURNEY_ID,
-        type: "round_matches",
-        round: currentRoundAcronym,
-      },
-    ],
+    queryKey: ["huis", "matches", currentRoundAcronym],
     queryFn: () => {
       console.assert(
         currentRoundAcronym,
@@ -207,6 +198,9 @@ export function useScheduleQuery() {
   };
 
   for (const match of matches) {
+    preloadImage(match.player1.avatarUrl);
+    preloadImage(match.player2.avatarUrl);
+
     if (match.date < now) {
       splitMatches.recent.unshift(match);
     } else {
@@ -215,4 +209,27 @@ export function useScheduleQuery() {
   }
 
   return splitMatches;
+}
+
+function fetchSupporters() {
+  return fetchAndParse("banners/list", supportersSchema);
+}
+
+export function useSupportersQuery() {
+  const { data: supporters, error } = useQuery({
+    queryKey: ["huis", "supporters"],
+    queryFn: fetchSupporters,
+  });
+
+  if (error) {
+    console.error(error);
+  }
+
+  if (!supporters) {
+    return [];
+  }
+
+  supporters.forEach((s) => preloadImage(getAvatarUrl(s.userId)));
+
+  return supporters;
 }

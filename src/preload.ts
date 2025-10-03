@@ -3,11 +3,13 @@ import {
   useMappoolQuery,
   useTournamentQuery,
   useScheduleQuery,
-} from "./huis";
+  useSupportersQuery,
+} from "./state/huis";
 
 export function usePreload() {
   useMatchesQuery();
   useMappoolQuery();
   useTournamentQuery();
   useScheduleQuery();
+  useSupportersQuery();
 }

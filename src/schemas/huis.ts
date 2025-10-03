@@ -234,3 +234,21 @@ export const mappoolSchema = z
 export type Mappool = z.infer<typeof mappoolSchema>;
 
 export type Beatmap = Mappool[number];
+
+export const supportersSchema = z.array(
+  z
+    .object({
+      supported_name: z.string(),
+      supported_user_id: z.number(),
+      supporter_name: z.string(),
+      supporter_user_id: z.number(),
+    })
+    .transform((s) => ({
+      name: s.supporter_name,
+      userId: s.supporter_user_id,
+      supportedName: s.supported_name,
+      supportedUserId: s.supported_user_id,
+    })),
+);
+
+export type Supporters = z.infer<typeof supportersSchema>;

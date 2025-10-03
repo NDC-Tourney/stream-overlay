@@ -6,7 +6,7 @@ import { StartScreen } from "./Startscreen";
 import { VersusScreen } from "./Versus";
 import { WinnerScreen } from "./Winner";
 import { useSettings } from "./state/dashboard";
-import { usePreload } from "./state/preload";
+import { usePreload } from "./preload";
 
 export function Screens() {
   usePreload();
