@@ -1,6 +1,6 @@
 {
   "name": "ndc-stream-overlay",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "type": "module",
   "scripts": {
     "dev": "bun --hot --console-depth=0 src/main.ts",
