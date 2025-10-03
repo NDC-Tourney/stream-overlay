@@ -15,7 +15,7 @@ console.log(
 const overlayUrl = server.url.toString();
 const dashboardUrl = new URL("dashboard", server.url).toString();
 
-if (isProduction) {
+if (isProduction && process.env.OPEN_DASHBOARD_URL !== "false") {
   open(dashboardUrl);
 }
 
