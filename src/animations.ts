@@ -87,17 +87,16 @@ export function getAnimations(from: string, to: string): AnimTypes {
   // Scheduling: always full fade in/out
   if (a === "scheduling" || b === "scheduling") {
     // eslint-disable-next-line no-console
-    console.debug("getAnimations(scheduling)", { from: a, to: b });
+    // console.debug("getAnimations(scheduling)", { from: a, to: b });
     return { header: "fade", main: "fade", footer: "fade" };
   }
 
   // Helper to test both directions
-  const either = (...pairs: string[]) => pairs.some((p) => p === key || p === rev);
+  const either = (...pairs: string[]) =>
+    pairs.some((p) => p === key || p === rev);
 
   // Start ↔ Standby, Mappool, Winner: Slide top & middle, instantly change bottom (no animation)
-  if (either(
-    "start->standby", "start->mappool", "start->winner",
-  )) {
+  if (either("start->standby", "start->mappool", "start->winner")) {
     return { header: "fade", main: "fade", footer: "fade" };
   }
 
@@ -138,6 +137,6 @@ export function getAnimations(from: string, to: string): AnimTypes {
 
   // default
   // eslint-disable-next-line no-console
-  console.debug("getAnimations(default)", { from: a, to: b, key, rev });
+  // console.debug("getAnimations(default)", { from: a, to: b, key, rev });
   return anim;
 }
