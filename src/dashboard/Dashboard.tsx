@@ -18,9 +18,13 @@ export function Dashboard() {
 
   // default to the next upcoming match on startup
   useEffect(() => {
-    const nextMatch = schedule.upcoming[0]?.uid ?? schedule.recent[0]?.uid;
+    const nextMatch = schedule.upcoming[0] ?? schedule.recent[0];
     if (!settings.matchId && nextMatch) {
-      setSettings((settings) => ({ ...settings, matchId: nextMatch }));
+      setSettings((settings) => ({
+        ...settings,
+        matchId: nextMatch.uid,
+        countdown: nextMatch.date,
+      }));
     }
   }, [settings.matchId, schedule]);
 
@@ -61,7 +65,7 @@ export function Dashboard() {
 
   // Match ID dropdown
   const [matchIsOpen, setMatchOpen] = useState(false);
-  const matchDropdownRef = useRef<HTMLDivElement | null>(null);
+  const matchDropdownRef = useRef<HTMLDivElement>(null);
 
   const { beatmaps } = useMappoolQuery();
   const mappoolOptions = Object.values(beatmaps)
@@ -73,8 +77,8 @@ export function Dashboard() {
   const [bansOpen, setBansOpen] = useState(false);
   const [picksSelection, setPicksSelection] = useState("Select");
   const [picksOpen, setPicksOpen] = useState(false);
-  const bansDropdownRef = useRef<HTMLDivElement | null>(null);
-  const picksDropdownRef = useRef<HTMLDivElement | null>(null);
+  const bansDropdownRef = useRef<HTMLDivElement>(null);
+  const picksDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleConfirm = (pickOrBan: "bans" | "picks") => {
     const map = pickOrBan === "bans" ? bansSelection : picksSelection;
