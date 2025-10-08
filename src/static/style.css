@@ -1276,8 +1276,8 @@ p {
 
 .match-red-player-icon,
 .match-blue-player-icon {
-  width: 67px;
-  height: 67px;
+  width: 68px;
+  height: 68px;
 }
 
 .match-red-player-icon img {
@@ -1307,8 +1307,8 @@ p {
 }
 
 .match-box {
-  width: 67px;
-  height: 67px;
+  width: 68px;
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: center;
