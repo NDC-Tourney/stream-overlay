@@ -125,7 +125,7 @@ const matchSchema = z
 
     type Player = WithRequired<
       Partial<ReturnType<typeof getPlayer>>,
-      "name" | "avatarUrl" | "pickemsRate" | "supporters" | "seed"
+      "name" | "avatarUrl" | "pickemsRate" | "supporters"
     >;
 
     return {

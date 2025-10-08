@@ -60,7 +60,6 @@ export function useMatchesQuery() {
   const defaultPlayer: Player = {
     name: "???",
     avatarUrl: defaultAvatarUrl,
-    seed: 0,
     supporters: [],
     pickemsRate: "0.00",
     winner: false,
