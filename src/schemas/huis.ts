@@ -13,10 +13,10 @@ const zodBinaryToBoolean = z
 
 const zodParseHuisApiDate = z.preprocess((val) => {
   if (typeof val === "string") {
-    return dayjs(val, { utc: true }).toDate();
+    return dayjs(val, { utc: true }).valueOf();
   }
   return val;
-}, z.date());
+}, z.number());
 
 const staffSchema = z
   .object({
@@ -171,13 +171,11 @@ export const matchesSchema = z
               if (!player2Confirmed) {
                 o.player2.name = `${o.player2.name}?`;
               }
-
-              return o;
             }),
           );
         }),
       )
-      .toSorted((a, b) => Number(a.date) - Number(b.date)),
+      .toSorted((a, b) => a.date - b.date),
   );
 
 export type Match = WithRequired<
@@ -203,7 +201,7 @@ export const tournamentSchema = z.object({
         })),
     )
     .transform((rounds) =>
-      rounds.toSorted((a, b) => Number(a.startDate) - Number(b.startDate)),
+      rounds.toSorted((a, b) => a.startDate - b.startDate),
     ),
 });
 

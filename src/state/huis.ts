@@ -168,9 +168,9 @@ function useCurrentRoundMatchesQuery(currentRoundAcronym?: string) {
 export function useScheduleQuery() {
   const tournament = useTournamentQuery();
 
-  const now = new Date();
+  const now = Date.now();
   const currentRound = tournament.data?.rounds.find(
-    (round) => Number(round.endDate) > Number(now),
+    (round) => round.endDate > now,
   );
 
   const { data: matches, error } = useCurrentRoundMatchesQuery(

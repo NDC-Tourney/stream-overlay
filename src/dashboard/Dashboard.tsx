@@ -20,11 +20,12 @@ export function Dashboard() {
   useEffect(() => {
     const nextMatch = schedule.upcoming[0] ?? schedule.recent[0];
     if (!settings.matchId && nextMatch) {
-      setSettings((settings) => ({
-        ...settings,
-        matchId: nextMatch.uid,
-        countdown: nextMatch.date,
-      }));
+      setSettings(
+        produce((settings) => {
+          settings.matchId = nextMatch.uid;
+          settings.countdown = nextMatch.date;
+        }),
+      );
     }
   }, [settings.matchId, schedule]);
 
@@ -125,7 +126,7 @@ export function Dashboard() {
 
     setSettings((prev) => ({
       ...prev,
-      countdown: parsedTime.toDate(),
+      countdown: parsedTime.valueOf(),
     }));
     console.log("Selected date and time:", parsedTime.toDate());
   };

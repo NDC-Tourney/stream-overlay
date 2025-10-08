@@ -13,7 +13,7 @@ export const settingsSchema = z.object({
   automaticSelect: z.boolean(),
   activeScreen: screenNameSchema,
   previousScreen: screenNameSchema.optional(),
-  countdown: z.coerce.date().optional(),
+  countdown: z.number().optional(),
   player1: playerSettingsSchema,
   player2: playerSettingsSchema,
   lastPickedBy: playerSchema.nullish(),

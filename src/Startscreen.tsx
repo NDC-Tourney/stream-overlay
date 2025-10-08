@@ -69,7 +69,7 @@ export function StartScreen({ from, to }: StartScreenProps) {
                     <span>Time to start: </span>
                     <span className="ss-countdown">
                       <Countdown
-                        key={`countdown-${settings.countdown.getTime()}`}
+                        key={`countdown-${settings.countdown}`}
                         renderer={renderer}
                         date={settings.countdown}
                         autoStart={true}
