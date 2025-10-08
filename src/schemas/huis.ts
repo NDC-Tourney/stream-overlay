@@ -1,6 +1,7 @@
 import { getAvatarUrl, getBeatmapBgUrl } from "@/util";
 import type { WithRequired } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { produce } from "immer";
 import z from "zod";
 
 const zodBinaryToBoolean = z
@@ -152,7 +153,30 @@ export const matchesSchema = z
   })
   .transform((matches) =>
     matches.confirmed
-      .concat(matches.conditionals.flatMap((e) => e.options))
+      .concat(
+        matches.conditionals.flatMap((e) => {
+          let player1Confirmed = e.options.every(
+            (o) => o.player1.name === e.options[0]?.player1.name,
+          );
+          let player2Confirmed = e.options.every(
+            (o) => o.player2.name === e.options[0]?.player2.name,
+          );
+
+          return e.options.map(
+            produce((o) => {
+              if (!player1Confirmed) {
+                o.player1.name = `${o.player1.name}?`;
+              }
+
+              if (!player2Confirmed) {
+                o.player2.name = `${o.player2.name}?`;
+              }
+
+              return o;
+            }),
+          );
+        }),
+      )
       .toSorted((a, b) => Number(a.date) - Number(b.date)),
   );
 
