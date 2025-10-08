@@ -5,6 +5,7 @@ import "./dashboard.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DashboardSettingsProvider } from "@/state/dashboard.tsx";
 import "@/dayjs.ts";
+import { ZodError } from "zod";
 
 function start() {
   const rootEl = document.getElementById("root");
@@ -18,7 +19,7 @@ function start() {
       queries: {
         experimental_prefetchInRender: true,
         staleTime: 0,
-        retry: true,
+        retry: (_, error) => !(error instanceof ZodError),
       },
     },
   });
