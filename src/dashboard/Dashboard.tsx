@@ -18,11 +18,11 @@ export function Dashboard() {
 
   // default to the next upcoming match on startup
   useEffect(() => {
-    if (!settings.matchId && schedule.upcoming[0]?.uid) {
-      const nextMatch = schedule.upcoming[0].uid;
+    const nextMatch = schedule.upcoming[0]?.uid ?? schedule.recent[0]?.uid;
+    if (!settings.matchId && nextMatch) {
       setSettings((settings) => ({ ...settings, matchId: nextMatch }));
     }
-  }, [settings.matchId, schedule.upcoming]);
+  }, [settings.matchId, schedule]);
 
   const selectedMatch = useMemo(() => {
     const match = matches?.find((m) => m.uid === settings.matchId);

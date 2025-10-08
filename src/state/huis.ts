@@ -63,8 +63,6 @@ export function useMatchesQuery() {
     supporters: [],
     pickemsRate: "0.00",
     winner: false,
-    osuId: 0,
-    score: 0,
   };
 
   const defaultCurrentMatch: Match = {
