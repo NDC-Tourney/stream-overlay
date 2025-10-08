@@ -75,10 +75,6 @@ export function WinnerScreen({ from, to }: WinnerScreenProps) {
                     )}
                   </div>
                 </div>
-                {/* <div id="win-stage-info">
-                  <div id="win-stage-name">Quarter Finals</div>
-                  <div id="win-winner-loser">(Winners Bracket)</div>
-                </div> */}
                 <SupportersAvatars player={winner} side={winnerTeam} />
               </div>
               <div id="win-right">

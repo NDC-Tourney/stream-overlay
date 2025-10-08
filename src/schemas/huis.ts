@@ -137,6 +137,7 @@ const matchSchema = z
       player1: getPlayer(1) as Player,
       player2: getPlayer(2) as Player,
       isConditional: match.is_conditional,
+      isShowmatch: match.is_showmatch,
     };
   });
 

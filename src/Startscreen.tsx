@@ -30,9 +30,8 @@ const renderer = ({
 );
 
 export function StartScreen({ from, to }: StartScreenProps) {
-  const {
-    currentMatch: { player1, player2, ...match },
-  } = useMatchesQuery();
+  const { currentMatch } = useMatchesQuery();
+  const { player1, player2, roundName, isShowmatch, bracket } = currentMatch;
   const [settings] = useSettings();
   // treat this component as self (to) and other as from
   const anims: AnimTypes = getAnimations(to, from ?? "");
@@ -52,8 +51,10 @@ export function StartScreen({ from, to }: StartScreenProps) {
         <MainContent>
           <div id="ss-top">
             <div id="ss-title">
-              <div id="ss-stage-name">{match.roundName}</div>
-              <div id="ss-winner-loser">({match.bracket} Bracket)</div>
+              <div id="ss-stage-name">{roundName}</div>
+              <div id="ss-winner-loser">
+                ({isShowmatch ? "showmatch" : `${bracket} Bracket`})
+              </div>
             </div>
             <div id="ss-vs">
               <PlayerCard player={player1} side="red" />
