@@ -36,10 +36,12 @@ export function PlayerInfo({ playerNum }: { playerNum: 1 | 2 }) {
             <span className="player-info-label">Supporters: </span>
             {player.supporters.length}
           </div>
-          <div id="player-seed" className={`align-${side}`}>
-            <span className="player-info-label">Seed: </span>
-            {player.seed}
-          </div>
+          {player.seed && (
+            <div id="player-seed" className={`align-${side}`}>
+              <span className="player-info-label">Seed: </span>
+              {player.seed}
+            </div>
+          )}
         </div>
       </div>
       <div id={`${team}-maps-won`}>{points}</div>

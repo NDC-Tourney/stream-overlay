@@ -17,10 +17,12 @@ export function PlayerCard({ player, side }: Props) {
           <span className="player-info-label">Pickems: </span>
           {player.pickemsRate}%
         </div>
-        <div className="ss-player-seed">
-          <span className="player-info-label">Seed: </span>
-          {player.seed}
-        </div>
+        {player.seed && (
+          <div className="ss-player-seed">
+            <span className="player-info-label">Seed: </span>
+            {player.seed}
+          </div>
+        )}
       </div>
     </div>
   );

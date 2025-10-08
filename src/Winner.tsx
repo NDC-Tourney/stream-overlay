@@ -67,10 +67,12 @@ export function WinnerScreen({ from, to }: WinnerScreenProps) {
                       <span className="player-info-label">Pickems: </span>
                       {winner.pickemsRate}%
                     </div>
-                    <div id="win-player-seed">
-                      <span className="player-info-label">Seed: </span>
-                      {winner.seed}
-                    </div>
+                    {winner.seed && (
+                      <div id="win-player-seed">
+                        <span className="player-info-label">Seed: </span>
+                        {winner.seed}
+                      </div>
+                    )}
                   </div>
                 </div>
                 {/* <div id="win-stage-info">
