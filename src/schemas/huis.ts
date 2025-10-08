@@ -76,8 +76,8 @@ const matchSchema = z
     player1_id: z.number(),
     player2_id: z.number(),
 
-    seed1: z.number(),
-    seed2: z.number(),
+    seed1: z.number().nullable(),
+    seed2: z.number().nullable(),
     id1: z.number(),
     id2: z.number(),
     name1: z.string(),
