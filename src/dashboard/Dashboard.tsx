@@ -79,7 +79,7 @@ export function Dashboard() {
   const { beatmaps } = useMappoolQuery();
   const mappoolOptions = Object.values(beatmaps)
     .flat()
-    .map((map) => map.modBracket + map.modBracketIndex);
+    .map((map) => `${map.modBracket}${map.modBracketIndex}`);
 
   // Bans & Picks dropdown
   const [bansSelection, setBansSelection] = useState("Select");
@@ -147,6 +147,7 @@ export function Dashboard() {
         settings.showCountdown = value;
       }),
     );
+
   // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -169,6 +170,46 @@ export function Dashboard() {
     window.addEventListener("click", handleClickOutside);
     return () => window.removeEventListener("click", handleClickOutside);
   }, []);
+
+  const BannedOrPicked = ({ map }: { map: string }) => {
+    if (settings.player1.picks.includes(map)) {
+      return (
+        <>
+          {map}
+          <span style={{ color: "#dc1f2b" }}> picked</span>
+        </>
+      );
+    }
+
+    if (settings.player2.picks.includes(map)) {
+      return (
+        <>
+          {map}
+          <span style={{ color: "#2f6bff" }}> picked</span>
+        </>
+      );
+    }
+
+    if (settings.player1.bans.includes(map)) {
+      return (
+        <>
+          <s>{map}</s>
+          <span style={{ color: "#dc1f2b" }}> banned</span>
+        </>
+      );
+    }
+
+    if (settings.player2.bans.includes(map)) {
+      return (
+        <>
+          <s>{map}</s>
+          <span style={{ color: "#2f6bff" }}> banned</span>
+        </>
+      );
+    }
+
+    return map;
+  };
 
   return (
     <div id="main">
@@ -286,7 +327,7 @@ export function Dashboard() {
                     setBansOpen(false);
                   }}
                 >
-                  {opt}
+                  <BannedOrPicked map={opt} />
                 </div>
               ))}
             </div>
@@ -315,7 +356,7 @@ export function Dashboard() {
                     setPicksOpen(false);
                   }}
                 >
-                  {opt}
+                  <BannedOrPicked map={opt} />
                 </div>
               ))}
             </div>
