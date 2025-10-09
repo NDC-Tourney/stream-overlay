@@ -104,6 +104,7 @@ button:active {
   overflow-x: hidden;
   text-overflow: ellipsis;
   font-variant-numeric: tabular-nums;
+  user-select: none;
 }
 
 #match-select-id-input::after {
@@ -220,7 +221,6 @@ button:active {
   margin-top: 16px;
   padding-left: 10px;
   padding-bottom: 20px;
-  user-select: none;
 }
 
 #scene-switcher-select {
@@ -329,6 +329,7 @@ button:active {
   font-size: 24px;
   color: white;
   bottom: 8px;
+  user-select: none;
 }
 
 #ban-select-id-input::after {
@@ -385,6 +386,7 @@ button:active {
   font-size: 24px;
   color: white;
   bottom: 8px;
+  user-select: none;
 }
 
 #pick-select-id-input::after {
