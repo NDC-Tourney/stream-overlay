@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DashboardSettingsProvider } from "@/state/dashboard.tsx";
 import "@/dayjs.ts";
 import { ZodError } from "zod";
+import { TosuProvider } from "@/state/tosu.tsx";
 
 function start() {
   const rootEl = document.getElementById("root");
@@ -29,7 +30,9 @@ function start() {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <DashboardSettingsProvider>
-          <Dashboard />
+          <TosuProvider>
+            <Dashboard />
+          </TosuProvider>
         </DashboardSettingsProvider>
       </QueryClientProvider>
     </StrictMode>,

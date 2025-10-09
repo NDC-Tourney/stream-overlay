@@ -6,6 +6,7 @@ import {
   useMatchesQuery,
   useScheduleQuery,
 } from "@/state/huis";
+import { useTosu } from "@/state/tosu";
 import dayjs from "dayjs";
 import { produce } from "immer";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -13,7 +14,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 export function Dashboard() {
   const { matches } = useMatchesQuery();
   const schedule = useScheduleQuery();
+  const { tourney } = useTosu();
   const [settings, setSettings] = useSettings();
+
   const autoselect = settings.automaticSelect;
 
   // default to the next upcoming match on startup
@@ -124,6 +127,21 @@ export function Dashboard() {
       ? setPicksSelection("Confirmed!")
       : setBansSelection("Confirmed!");
   };
+
+  useEffect(() => {
+    if (mappoolOptions.length === 0) {
+      return;
+    }
+
+    const match = tourney.chat
+      .at(-1)
+      ?.message.match(new RegExp(mappoolOptions.join("|"), "i"))?.[0];
+
+    if (match) {
+      setPicksSelection(match.toUpperCase());
+      setBansSelection(match.toUpperCase());
+    }
+  }, [tourney.chat.at(-1)?.message, JSON.stringify(mappoolOptions)]);
 
   const handleCountdownDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,

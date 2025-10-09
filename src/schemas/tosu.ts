@@ -65,7 +65,14 @@ export const tosuApiResponseSchema = z
         left: z.number(),
         right: z.number(),
       }),
-      chat: z.array(z.unknown()),
+      chat: z.array(
+        z.object({
+          message: z.string(),
+          name: z.string(),
+          team: z.string(),
+          timestamp: z.string(),
+        }),
+      ),
       totalScore: z.object({
         left: z.number(),
         right: z.number(),
