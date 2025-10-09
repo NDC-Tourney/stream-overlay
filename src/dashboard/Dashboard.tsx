@@ -35,34 +35,42 @@ export function Dashboard() {
       ? `${match.uid} ${match.player1.name} - ${match.player2.name}`
       : "Select";
   }, [matches, settings.matchId]);
+
   const countdownDate = dayjs(settings.countdown).format("HH:mm");
 
-  const setAutoselect = (value: boolean) => {
-    setSettings((prev) => ({ ...prev, automaticSelect: value }));
-  };
+  const setAutoselect = (value: boolean) =>
+    setSettings(
+      produce((settings) => {
+        settings.automaticSelect = value;
+      }),
+    );
 
-  const setSelectedScreen = (screen: ScreenName) => {
-    setSettings((prev) => ({
-      ...prev,
-      activeScreen: screen,
-      previousScreen: prev.activeScreen,
-    }));
-  };
+  const setSelectedScreen = (screen: ScreenName) =>
+    setSettings(
+      produce((settings) => {
+        if (settings.countdown && settings.countdown < Date.now()) {
+          settings.showCountdown = false;
+        }
 
-  const setSelectedMatch = (match: Match) => {
-    setSettings((prev) => ({
-      ...prev,
-      matchId: match.uid,
-      countdown: match.date,
-    }));
-  };
+        settings.activeScreen = screen;
+        settings.previousScreen = settings.activeScreen;
+      }),
+    );
 
-  const setActivePlayer = (player: "player1" | "player2") => {
-    setSettings((prev) => ({
-      ...prev,
-      activePlayer: player,
-    }));
-  };
+  const setSelectedMatch = (match: Match) =>
+    setSettings(
+      produce((settings) => {
+        settings.matchId = match.uid;
+        settings.countdown = match.date;
+      }),
+    );
+
+  const setActivePlayer = (player: "player1" | "player2") =>
+    setSettings(
+      produce((settings) => {
+        settings.activePlayer = player;
+      }),
+    );
 
   // Match ID dropdown
   const [matchIsOpen, setMatchOpen] = useState(false);
@@ -124,21 +132,19 @@ export function Dashboard() {
       parsedTime = parsedTime.add(1, "day");
     }
 
-    setSettings((prev) => ({
-      ...prev,
-      countdown: parsedTime.valueOf(),
-    }));
-    console.log("Selected date and time:", parsedTime.toDate());
+    setSettings(
+      produce((settings) => {
+        settings.countdown = parsedTime.valueOf();
+      }),
+    );
   };
 
-  const setCountdownVisibility = (value: boolean) => {
+  const setCountdownVisibility = (value: boolean) =>
     setSettings(
       produce((settings) => {
         settings.showCountdown = value;
       }),
     );
-  };
-
   // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
