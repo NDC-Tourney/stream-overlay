@@ -131,6 +131,14 @@ export function Dashboard() {
     console.log("Selected date and time:", parsedTime.toDate());
   };
 
+  const setCountdownVisibility = (value: boolean) => {
+    setSettings(
+      produce((settings) => {
+        settings.showCountdown = value;
+      }),
+    );
+  };
+
   // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -185,12 +193,12 @@ export function Dashboard() {
             ))}
           </div>
         </div>
-        {/* <div id="match-select-auto">
+        {/* <div className="checkbox-input">
           <label
             htmlFor="match-select-auto-checkbox"
-            id="match-select-auto-text"
+            className="checkbox-label"
           >
-            Auto-select match from lobby name:
+            Auto-select match from lobby name
           </label>
           <input
             type="checkbox"
@@ -315,13 +323,25 @@ export function Dashboard() {
       {/* Countdown */}
       <div id="countdown">
         <div id="countdown-text">Countdown</div>
-        <input
-          id="countdown-input"
-          type="time"
-          value={countdownDate}
-          onChange={handleCountdownDateChange}
-          step={60}
-        ></input>
+        <div id="countdown-controls">
+          <input
+            id="countdown-input"
+            type="time"
+            value={countdownDate}
+            onChange={handleCountdownDateChange}
+            step={60}
+          />
+          <div className="checkbox-input">
+            <label htmlFor="show-countdown">Show countdown</label>
+            <input
+              name="show-countdown"
+              id="show-countdown"
+              type="checkbox"
+              checked={settings.showCountdown}
+              onChange={(e) => setCountdownVisibility(e.target.checked)}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

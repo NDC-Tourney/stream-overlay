@@ -11,6 +11,7 @@ import { PlayerCard } from "./components/PlayerCard";
 import SupportersAvatars from "./components/SupportersAvatars";
 import { useSettings } from "./state/dashboard";
 import { useMatchesQuery } from "./state/huis";
+import clsx from "clsx";
 
 interface StartScreenProps {
   from?: string;
@@ -63,20 +64,21 @@ export function StartScreen({ from, to }: StartScreenProps) {
             </div>
             <div id="ss-middle">
               <SupportersAvatars player={player1} side="red" reverse={true} />
-              <div>
-                {settings.countdown && (
-                  <div className="ss-time-to-start">
-                    <span>Time to start: </span>
-                    <span className="ss-countdown">
-                      <Countdown
-                        key={`countdown-${settings.countdown}`}
-                        renderer={renderer}
-                        date={settings.countdown}
-                        autoStart={true}
-                      />
-                    </span>
-                  </div>
+              <div
+                className={clsx(
+                  "ss-time-to-start",
+                  settings.showCountdown && "visible",
                 )}
+              >
+                <span>Time to start: </span>
+                <span className="ss-countdown">
+                  <Countdown
+                    key={`countdown-${settings.countdown}`}
+                    renderer={renderer}
+                    date={settings.countdown}
+                    autoStart={true}
+                  />
+                </span>
               </div>
               <SupportersAvatars player={player2} side="blue" />
             </div>

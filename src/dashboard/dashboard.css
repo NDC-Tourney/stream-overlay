@@ -90,7 +90,7 @@ button:active {
 #match-select-id-input {
   position: relative;
   width: 409px;
-  height: 40px;
+  height: 48px;
   background: #4c2980;
   cursor: pointer;
   align-content: center;
@@ -114,8 +114,8 @@ button:active {
   border: 6px solid transparent;
   border-top-color: #fff;
   transform-origin: center 3px;
-  top: 17px;
-  right: 17px;
+  top: 21px;
+  right: 21px;
   transition: transform 0.2s ease;
 }
 
@@ -154,25 +154,26 @@ button:active {
   display: flex;
 }
 
-#match-select-auto {
+.checkbox-input {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-inline: 4px;
+  user-select: none;
+  font-size: 24px;
+  font-family: "BenderRegular", sans-serif;
+  font-weight: normal;
 }
 
 [type="checkbox"] {
   appearance: none;
   aspect-ratio: 1;
   box-sizing: border-box;
-  font-size: 1em;
-  width: 1em;
+  font-size: 24px;
+  width: 24px;
   padding: 0;
   margin: 0;
-}
-
-#match-select-auto-checkbox {
   border: 2px solid #8454ca;
-  background-color: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -180,7 +181,7 @@ button:active {
   transition: background-color 200ms ease;
 }
 
-#match-select-auto-checkbox::after {
+[type="checkbox"]::after {
   content: "";
   width: 10px;
   height: 10px;
@@ -189,11 +190,11 @@ button:active {
   transition: transform 150ms ease-in-out;
 }
 
-#match-select-auto-checkbox:checked {
+[type="checkbox"]:checked {
   background-color: #4c2980;
 }
 
-#match-select-auto-checkbox:checked::after {
+[type="checkbox"]:checked::after {
   content: "";
   transform: scale(1);
   display: inline-block;
@@ -216,9 +217,10 @@ button:active {
   font-weight: normal;
   color: white;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 16px;
   padding-left: 10px;
   padding-bottom: 20px;
+  user-select: none;
 }
 
 #scene-switcher-select {
@@ -356,7 +358,6 @@ button:active {
 
 .ban-select-dropdown-options div {
   padding: 10px;
-  cursor: pointer;
   font-size: 16px;
   font-weight: 500;
   color: white;
@@ -413,7 +414,6 @@ button:active {
 
 .pick-select-dropdown-options div {
   padding: 10px;
-  cursor: pointer;
   font-size: 16px;
   font-weight: 500;
   color: white;
@@ -473,12 +473,17 @@ button:active {
   align-items: center;
 }
 
-#countdown-input {
-  width: 429px;
-  height: 61px;
-  background: #4c2980;
+#countdown-controls {
   display: flex;
-  align-items: center;
+  gap: 10px;
+}
+
+#countdown-input {
+  width: 180px;
+  height: 48px;
+  background: #4c2980;
+  padding-left: 8px;
+  display: flex;
   justify-content: center;
   font-size: 24px;
   font-family: BenderBold, Helvetica, sans-serif;
@@ -488,8 +493,6 @@ button:active {
   outline: none;
   box-shadow: none;
   border: none;
-  text-align: center;
-  margin-bottom: 10px;
 }
 
 #countdown-input:focus {

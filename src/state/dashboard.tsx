@@ -79,6 +79,7 @@ export function DashboardSettingsProvider({
       picks: [],
     },
     activePlayer: "player1",
+    showCountdown: true,
   });
 
   const setSettings = useCallback(

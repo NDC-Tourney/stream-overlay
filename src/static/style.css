@@ -731,10 +731,16 @@ p {
   color: white;
   text-align: center;
   padding-top: 120px;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .ss-countdown {
   font-size: 64px;
+}
+
+.visible {
+  opacity: 1;
 }
 
 #current-status {
