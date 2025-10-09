@@ -96,26 +96,28 @@ export function Dashboard() {
     }
 
     setSettings(
-      produce((prev) => {
-        const prevSelection = prev[prev.activePlayer];
-        if (!prevSelection[pickOrBan].includes(map)) {
-          prevSelection[pickOrBan].push(map);
-
-          const other = pickOrBan === "bans" ? "picks" : "bans";
-          if (prevSelection[other].includes(map)) {
-            prevSelection[other] = prevSelection[other].filter(
-              (m) => m !== map,
-            );
+      produce((settings) => {
+        const selection = settings[settings.activePlayer];
+        if (!selection[pickOrBan].includes(map)) {
+          // remove from all selections first
+          for (const player of ["player1", "player2"] as const) {
+            for (const type of ["bans", "picks"] as const) {
+              settings[player][type] = settings[player][type].filter(
+                (m) => m !== map,
+              );
+            }
           }
-        } else {
-          prevSelection[pickOrBan] = prevSelection[pickOrBan].filter(
-            (m) => m !== map,
-          );
-        }
-        prev.lastPickedBy = map.includes("TB") ? null : prev.activePlayer;
 
-        prev.activePlayer =
-          prev.activePlayer === "player1" ? "player2" : "player1";
+          selection[pickOrBan].push(map);
+        } else {
+          selection[pickOrBan] = selection[pickOrBan].filter((m) => m !== map);
+        }
+
+        settings.lastPickedBy = map.includes("TB")
+          ? null
+          : settings.activePlayer;
+        settings.activePlayer =
+          settings.activePlayer === "player1" ? "player2" : "player1";
       }),
     );
     pickOrBan === "picks"
