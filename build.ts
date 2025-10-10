@@ -1,6 +1,6 @@
 import { $ } from "bun";
 import type { JSONType } from "node_modules/zod/v4/core/util.d.cts";
-// import bunPluginTailwind from "bun-plugin-tailwind";
+import bunPluginTailwind from "bun-plugin-tailwind";
 
 const targets: Record<string, Bun.Build.Target> = {
   win: "bun-windows-x64",
@@ -24,8 +24,8 @@ const stringifyValues = (obj: Record<string, JSONType>) => {
 
 for (const [platform, target] of Object.entries(targets)) {
   await Bun.build({
-    // plugins: [bunPluginTailwind],
     plugins: [
+      bunPluginTailwind,
       {
         name: "hooks",
         setup(build) {

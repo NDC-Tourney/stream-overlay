@@ -2,6 +2,7 @@ import type { Player } from "@/schemas/huis";
 import { getAvatarUrl } from "@/util";
 import clsx from "clsx";
 import { PlayerAvatar } from "./PlayerAvatar";
+import { Marquee } from "./Marquee";
 
 type Props = {
   player: Player;
@@ -14,23 +15,37 @@ export default function SupportersAvatars({
   reverse = false,
   side,
 }: Props) {
+  const Avatars = () =>
+    player.supporters.map((supporter, i) => (
+      <div key={`${supporter.id}-${i}`}>
+        <PlayerAvatar
+          className="supporter"
+          url={getAvatarUrl(supporter.id)}
+          color={side}
+        />
+        <div className="ss-supporter-name">{supporter.name}</div>
+      </div>
+    ));
+
   return (
-    <div className={clsx("ss-supporters", reverse && "reverse")}>
+    <div className={clsx("ss-supporters", { reverse: reverse })}>
       <div className="ss-supporters-amount">
         <span className="player-info-label">Supporters: </span>
         {player.supporters.length}
       </div>
-      <div className={clsx("ss-supporters-avatars", reverse && "reverse")}>
-        {player.supporters.map((supporter, i) => (
-          <div key={`${supporter.id}-${i}`}>
-            <PlayerAvatar
-              className="supporter"
-              url={getAvatarUrl(supporter.id)}
-              color={side}
-            />
-            <div className="ss-supporter-name">{supporter.name}</div>
-          </div>
-        ))}
+      <div
+        className={clsx("ss-supporters-avatars", {
+          reverse: reverse,
+          grid: player.supporters.length <= 4,
+        })}
+      >
+        {player.supporters.length > 4 ? (
+          <Marquee fade={true}>
+            <Avatars />
+          </Marquee>
+        ) : (
+          <Avatars />
+        )}
       </div>
     </div>
   );

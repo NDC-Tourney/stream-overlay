@@ -1,3 +1,6 @@
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 export type WithOptional<T, U extends keyof T> = Pick<
   T,
   Exclude<keyof T, U>
@@ -28,4 +31,8 @@ export function preloadImage(url: string) {
   const img = new Image();
   img.fetchPriority = "low";
   img.src = url;
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }

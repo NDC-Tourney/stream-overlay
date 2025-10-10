@@ -1,3 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --animate-marquee-left: marquee-left var(--duration, 40s) linear infinite;
+  --animate-marquee-up: marquee-up var(--duration, 40s) linear infinite;
+
+  @keyframes marquee-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes marquee-up {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+}
+
 @font-face {
   font-family: "BenderBlack";
   src: url("../fonts/Bender-Black.otf");
@@ -685,12 +710,15 @@ p {
 }
 
 .ss-supporters-avatars {
+  width: 740px;
+  margin: 0 -22px;
+}
+
+.ss-supporters-avatars.grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: 1;
   gap: 10px 10px;
-  width: 740px;
-  margin: 0 -22px;
 }
 
 /* kinda cursed but fuck iiit */
