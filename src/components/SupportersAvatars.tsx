@@ -3,6 +3,7 @@ import { getAvatarUrl } from "@/util";
 import clsx from "clsx";
 import { PlayerAvatar } from "./PlayerAvatar";
 import { Marquee } from "./Marquee";
+import { useCallback } from "react";
 
 type Props = {
   player: Player;
@@ -15,17 +16,20 @@ export default function SupportersAvatars({
   reverse = false,
   side,
 }: Props) {
-  const Avatars = () =>
-    player.supporters.map((supporter, i) => (
-      <div key={`${supporter.id}-${i}`}>
-        <PlayerAvatar
-          className="supporter"
-          url={getAvatarUrl(supporter.id)}
-          color={side}
-        />
-        <div className="ss-supporter-name">{supporter.name}</div>
-      </div>
-    ));
+  const Avatars = useCallback(
+    () =>
+      player.supporters.map((supporter, i) => (
+        <div key={`${supporter.id}-${i}`}>
+          <PlayerAvatar
+            className="supporter"
+            url={getAvatarUrl(supporter.id)}
+            color={side}
+          />
+          <div className="ss-supporter-name">{supporter.name}</div>
+        </div>
+      )),
+    [JSON.stringify(player.supporters)],
+  );
 
   return (
     <div className={clsx("ss-supporters", { reverse: reverse })}>
