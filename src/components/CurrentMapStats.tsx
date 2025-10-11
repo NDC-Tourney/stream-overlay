@@ -48,7 +48,22 @@ export function CurrentMapStats() {
         </div>
         <div id="current-map-length">
           <p>Length</p>
-          <div id="length">{formatTime(beatmap.length)}</div>
+          <div id="length">
+            {beatmap.setId === 2445805 ? (
+              <span
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 42,
+                  position: "absolute",
+                  top: 90,
+                }}
+              >
+                ∞
+              </span>
+            ) : (
+              formatTime(beatmap.length)
+            )}
+          </div>
         </div>
       </div>
     </div>
