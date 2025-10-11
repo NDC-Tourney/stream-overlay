@@ -9,12 +9,14 @@ import {
 import { useTosu } from "@/state/tosu";
 import dayjs from "dayjs";
 import { produce } from "immer";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export function Dashboard() {
   const { matches } = useMatchesQuery();
   const schedule = useScheduleQuery();
-  const { tourney } = useTosu();
+  const {
+    tourney: { chat },
+  } = useTosu();
   const [settings, setSettings] = useSettings();
 
   const autoselect = settings.automaticSelect;
@@ -30,7 +32,7 @@ export function Dashboard() {
         }),
       );
     }
-  }, [settings.matchId, schedule]);
+  }, [settings.matchId, schedule.upcoming[0], schedule.recent[0]]);
 
   const selectedMatch = useMemo(() => {
     const match = matches?.find((m) => m.uid === settings.matchId);
@@ -80,9 +82,13 @@ export function Dashboard() {
   const matchDropdownRef = useRef<HTMLDivElement>(null);
 
   const { beatmaps } = useMappoolQuery();
-  const mappoolOptions = Object.values(beatmaps)
-    .flat()
-    .map((map) => `${map.modBracket}${map.modBracketIndex}`);
+  const mappoolOptions = useMemo(
+    () =>
+      Object.values(beatmaps)
+        .flat()
+        .map((map) => `${map.modBracket}${map.modBracketIndex}`),
+    [beatmaps],
+  );
 
   // Bans & Picks dropdown
   const [bansSelection, setBansSelection] = useState("Select");
@@ -128,20 +134,24 @@ export function Dashboard() {
       : setBansSelection("Confirmed!");
   };
 
+  const lastMessage = chat.at(-1)?.message;
+  const lastMentionedMap = useRef<string>(null);
+
   useEffect(() => {
     if (mappoolOptions.length === 0) {
       return;
     }
 
-    const match = tourney.chat
-      .at(-1)
-      ?.message.match(new RegExp(mappoolOptions.join("|"), "i"))?.[0];
+    const map = lastMessage?.match(
+      new RegExp(mappoolOptions.join("|"), "i"),
+    )?.[0];
 
-    if (match) {
-      setPicksSelection(match.toUpperCase());
-      setBansSelection(match.toUpperCase());
+    if (map && lastMentionedMap.current !== map) {
+      lastMentionedMap.current = map;
+      setPicksSelection(map.toUpperCase());
+      setBansSelection(map.toUpperCase());
     }
-  }, [tourney.chat.at(-1)?.message, JSON.stringify(mappoolOptions)]);
+  }, [lastMessage, mappoolOptions]);
 
   const handleCountdownDateChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -185,49 +195,60 @@ export function Dashboard() {
       )
         setPicksOpen(false);
     };
+
     window.addEventListener("click", handleClickOutside);
     return () => window.removeEventListener("click", handleClickOutside);
   }, []);
 
-  const BannedOrPicked = ({ map }: { map: string }) => {
-    if (settings.player1.picks.includes(map)) {
-      return (
-        <>
-          {map}
-          <span style={{ color: "#dc1f2b" }}> picked</span>
-        </>
-      );
-    }
+  const BannedOrPicked = useCallback(
+    ({ map }: { map: string }) => {
+      if (settings.player1.picks.includes(map)) {
+        return (
+          <>
+            {map}
+            <span style={{ color: "#dc1f2b" }}> picked</span>
+          </>
+        );
+      }
 
-    if (settings.player2.picks.includes(map)) {
-      return (
-        <>
-          {map}
-          <span style={{ color: "#2f6bff" }}> picked</span>
-        </>
-      );
-    }
+      if (settings.player2.picks.includes(map)) {
+        return (
+          <>
+            {map}
+            <span style={{ color: "#2f6bff" }}> picked</span>
+          </>
+        );
+      }
 
-    if (settings.player1.bans.includes(map)) {
-      return (
-        <>
-          <s>{map}</s>
-          <span style={{ color: "#dc1f2b" }}> banned</span>
-        </>
-      );
-    }
+      if (settings.player1.bans.includes(map)) {
+        return (
+          <>
+            <s>{map}</s>
+            <span style={{ color: "#dc1f2b" }}> banned</span>
+          </>
+        );
+      }
 
-    if (settings.player2.bans.includes(map)) {
-      return (
-        <>
-          <s>{map}</s>
-          <span style={{ color: "#2f6bff" }}> banned</span>
-        </>
-      );
-    }
+      if (settings.player2.bans.includes(map)) {
+        return (
+          <>
+            <s>{map}</s>
+            <span style={{ color: "#2f6bff" }}> banned</span>
+          </>
+        );
+      }
 
-    return map;
-  };
+      return map;
+    },
+    [
+      JSON.stringify([
+        settings.player1.picks,
+        settings.player1.bans,
+        settings.player2.picks,
+        settings.player2.bans,
+      ]),
+    ],
+  );
 
   return (
     <div id="main">
