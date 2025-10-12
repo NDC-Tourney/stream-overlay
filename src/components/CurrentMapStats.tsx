@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import { useSettings } from "@/state/dashboard";
-import { useTosu } from "@/state/tosu";
+import { useSettings } from "~/state/dashboard";
+import { useTosu } from "~/state/tosu";
 
 export function CurrentMapStats() {
   const { beatmap } = useTosu();

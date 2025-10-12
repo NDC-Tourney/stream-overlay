@@ -1,4 +1,4 @@
-import logo from "@/static/img/logo.png";
+import logo from "~/static/img/logo.png";
 
 export function Logo() {
   return (

@@ -1,4 +1,3 @@
-import React from "react";
 import { PlayerInfo } from "./PlayerInfo";
 import { ScoreBars } from "./ScoreBars";
 import "./static/top.css";

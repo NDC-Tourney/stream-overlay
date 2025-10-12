@@ -1,6 +1,6 @@
-import { useMatchesQuery } from "@/state/huis";
-import { useTosu } from "@/state/tosu";
 import clsx from "clsx";
+import { useMatchesQuery } from "~/state/huis";
+import { useTosu } from "~/state/tosu";
 
 export function PlayerInfo({ playerNum }: { playerNum: 1 | 2 }) {
   const { tourney } = useTosu();

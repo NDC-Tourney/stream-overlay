@@ -1,7 +1,7 @@
-import { Updater } from "./updater";
-import { Server } from "./server";
-import { isProduction } from "./util";
 import open from "open";
+import { Server } from "./server";
+import { Updater } from "./updater";
+import { isProduction } from "./util";
 
 if (isProduction) {
   await Updater.checkAndApplyUpdates();

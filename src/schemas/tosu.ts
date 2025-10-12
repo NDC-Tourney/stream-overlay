@@ -1,5 +1,5 @@
-import { getBeatmapBgUrl } from "@/util";
 import z from "zod";
+import { getBeatmapBgUrl } from "~/util";
 
 const tosuBeatmapSchema = z.object({
   isKiai: z.boolean(),

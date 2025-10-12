@@ -1,6 +1,6 @@
+import { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { App } from "./App";
-import { StrictMode } from "react";
 import "./dayjs";
 
 function start() {

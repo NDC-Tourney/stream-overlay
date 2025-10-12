@@ -1,9 +1,9 @@
-import "./static/style.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TosuProvider } from "./state/tosu";
-import { DashboardSettingsProvider } from "./state/dashboard";
-import { Screens } from "./Screens";
 import { ZodError } from "zod";
+import { Screens } from "./Screens";
+import { DashboardSettingsProvider } from "./state/dashboard";
+import { TosuProvider } from "./state/tosu";
+import "./static/style.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {

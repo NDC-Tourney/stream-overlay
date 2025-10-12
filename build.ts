@@ -1,6 +1,6 @@
 import { $ } from "bun";
-import type { JSONType } from "node_modules/zod/v4/core/util.d.cts";
 import bunPluginTailwind from "bun-plugin-tailwind";
+import type { JSONType } from "node_modules/zod/v4/core/util.d.cts";
 
 const targets: Record<string, Bun.Build.Target> = {
   win: "bun-windows-x64",

@@ -1,8 +1,8 @@
-import { getAvatarUrl, getBeatmapBgUrl } from "@/util";
 import type { WithRequired } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { produce } from "immer";
 import z from "zod";
+import { getAvatarUrl, getBeatmapBgUrl } from "~/util";
 
 const zodBinaryToBoolean = z
   .number()

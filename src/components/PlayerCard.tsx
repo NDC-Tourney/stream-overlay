@@ -1,6 +1,6 @@
 import clsx from "clsx";
+import type { Player } from "~/schemas/huis";
 import { PlayerAvatar } from "./PlayerAvatar";
-import type { Player } from "@/schemas/huis";
 
 type Props = {
   player: Player;
