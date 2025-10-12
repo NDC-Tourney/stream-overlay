@@ -3,7 +3,7 @@
   "version": "1.13.0",
   "type": "module",
   "scripts": {
-    "dev": "bun --hot --console-depth=0 src/main.ts",
+    "dev": "bun --hot src/main.ts",
     "start": "NODE_ENV=production bun src/main.ts",
     "build": "bun run build.ts",
     "prepare-pack:win": "vpk download github --repoUrl https://github.com/NDC-Tourney/stream-overlay -c win",
