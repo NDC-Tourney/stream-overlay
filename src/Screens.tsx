@@ -1,12 +1,12 @@
-import { AnimatePresence } from "framer-motion";
-import { MappoolScreen } from "./Mappools";
-import { SchedulingScreen } from "./Scheduling";
-import { StandbyScreen } from "./Standby";
-import { StartScreen } from "./Startscreen";
-import { VersusScreen } from "./Versus";
-import { WinnerScreen } from "./Winner";
-import { useSettings } from "./state/dashboard";
-import { usePreload } from "./preload";
+import { AnimatePresence } from "motion/react";
+import { usePreload } from "~/preload";
+import { useSettings } from "~/state/dashboard";
+import { MappoolScreen } from "./screens/Mappools";
+import { SchedulingScreen } from "./screens/Scheduling";
+import { StandbyScreen } from "./screens/Standby";
+import { StartScreen } from "./screens/Startscreen";
+import { VersusScreen } from "./screens/Versus";
+import { WinnerScreen } from "./screens/Winner";
 
 export function Screens() {
   usePreload();

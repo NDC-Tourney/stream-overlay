@@ -1,12 +1,12 @@
-import { createRoot } from "react-dom/client";
-import { Dashboard } from "./Dashboard.tsx";
-import { StrictMode } from "react";
-import "./dashboard.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { DashboardSettingsProvider } from "@/state/dashboard.tsx";
-import "@/dayjs.ts";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { ZodError } from "zod";
-import { TosuProvider } from "@/state/tosu.tsx";
+import "~/dayjs.ts";
+import { DashboardSettingsProvider } from "~/state/dashboard.tsx";
+import { TosuProvider } from "~/state/tosu.tsx";
+import "./dashboard.css";
+import { Dashboard } from "./Dashboard.tsx";
 
 function start() {
   const rootEl = document.getElementById("root");

@@ -1,6 +1,6 @@
-import { tosuApiResponseSchema, type TosuData } from "@/schemas/tosu";
 import { useWebSocket } from "partysocket/react";
 import { createContext, use, useState, type ReactNode } from "react";
+import { tosuApiResponseSchema, type TosuData } from "~/schemas/tosu";
 
 const TosuContext = createContext<TosuData | null>(null);
 

@@ -1,4 +1,4 @@
-import { useMatchesQuery } from "@/state/huis";
+import { useMatchesQuery } from "~/state/huis";
 
 export function StageInfo() {
   const { currentMatch } = useMatchesQuery();

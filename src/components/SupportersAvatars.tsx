@@ -1,9 +1,9 @@
-import type { Player } from "@/schemas/huis";
-import { getAvatarUrl } from "@/util";
 import clsx from "clsx";
-import { PlayerAvatar } from "./PlayerAvatar";
-import { Marquee } from "./Marquee";
 import { useCallback } from "react";
+import type { Player } from "~/schemas/huis";
+import { getAvatarUrl } from "~/util";
+import { Marquee } from "./Marquee";
+import { PlayerAvatar } from "./PlayerAvatar";
 
 type Props = {
   player: Player;

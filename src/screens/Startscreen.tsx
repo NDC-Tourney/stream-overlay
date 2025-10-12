@@ -1,17 +1,17 @@
+import clsx from "clsx";
 import { motion } from "framer-motion";
 import Countdown, { zeroPad } from "react-countdown";
-import type { AnimTypes } from "./animations";
-import { getAnimations, sectionVariants } from "./animations";
-import { Casters } from "./components/Casters";
-import { Chat } from "./components/Chat";
-import { FooterContent } from "./components/FooterContent";
-import { Logo } from "./components/Logo";
-import { MainContent } from "./components/MainContent";
-import { PlayerCard } from "./components/PlayerCard";
-import SupportersAvatars from "./components/SupportersAvatars";
-import { useSettings } from "./state/dashboard";
-import { useMatchesQuery } from "./state/huis";
-import clsx from "clsx";
+import type { AnimTypes } from "~/animations";
+import { getAnimations, sectionVariants } from "~/animations";
+import { Casters } from "~/components/Casters";
+import { Chat } from "~/components/Chat";
+import { FooterContent } from "~/components/FooterContent";
+import { Logo } from "~/components/Logo";
+import { MainContent } from "~/components/MainContent";
+import { PlayerCard } from "~/components/PlayerCard";
+import SupportersAvatars from "~/components/SupportersAvatars";
+import { useSettings } from "~/state/dashboard";
+import { useMatchesQuery } from "~/state/huis";
 
 interface StartScreenProps {
   from?: string;

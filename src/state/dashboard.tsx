@@ -1,8 +1,3 @@
-import {
-  dashboardMessageSchema,
-  type DashboardSettings,
-  type DashboardMessage,
-} from "@/schemas/settings";
 import { useWebSocket } from "partysocket/react";
 import {
   createContext,
@@ -13,6 +8,11 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
+import {
+  dashboardMessageSchema,
+  type DashboardMessage,
+  type DashboardSettings,
+} from "~/schemas/settings";
 
 export const DashboardContext = createContext<
   [DashboardSettings, Dispatch<SetStateAction<DashboardSettings>>] | null

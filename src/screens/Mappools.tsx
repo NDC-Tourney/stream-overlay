@@ -1,18 +1,18 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import type { AnimTypes } from "./animations";
-import { getAnimations, sectionVariants } from "./animations";
-import { Casters } from "./components/Casters";
-import { Chat } from "./components/Chat";
-import { FooterContent } from "./components/FooterContent";
-import { HeaderContent } from "./components/HeaderContent";
-import { Logo } from "./components/Logo";
-import { MainContent } from "./components/MainContent";
-import { PlayerInfo } from "./components/PlayerInfo";
-import { StageInfo } from "./components/StageInfo";
-import { useSettings } from "./state/dashboard";
-import type { Beatmap } from "./schemas/huis";
-import { useMappoolQuery } from "./state/huis";
+import type { AnimTypes } from "~/animations";
+import { getAnimations, sectionVariants } from "~/animations";
+import { Casters } from "~/components/Casters";
+import { Chat } from "~/components/Chat";
+import { FooterContent } from "~/components/FooterContent";
+import { HeaderContent } from "~/components/HeaderContent";
+import { Logo } from "~/components/Logo";
+import { MainContent } from "~/components/MainContent";
+import { PlayerInfo } from "~/components/PlayerInfo";
+import { StageInfo } from "~/components/StageInfo";
+import type { Beatmap } from "~/schemas/huis";
+import { useSettings } from "~/state/dashboard";
+import { useMappoolQuery } from "~/state/huis";
 
 function ModBracket(
   beatmaps: Beatmap[],

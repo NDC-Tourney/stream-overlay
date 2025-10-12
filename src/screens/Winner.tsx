@@ -1,15 +1,15 @@
-import { useMatchesQuery } from "@/state/huis";
 import { motion } from "framer-motion";
-import type { AnimTypes } from "./animations";
-import { getAnimations, sectionVariants } from "./animations";
-import { Casters } from "./components/Casters";
-import { Chat } from "./components/Chat";
-import { FooterContent } from "./components/FooterContent";
-import { Logo } from "./components/Logo";
-import { MainContent } from "./components/MainContent";
-import SupportersAvatars from "./components/SupportersAvatars";
-import { useTosu } from "./state/tosu";
-import trophy from "./static/img/trophy.png";
+import type { AnimTypes } from "~/animations";
+import { getAnimations, sectionVariants } from "~/animations";
+import { Casters } from "~/components/Casters";
+import { Chat } from "~/components/Chat";
+import { FooterContent } from "~/components/FooterContent";
+import { Logo } from "~/components/Logo";
+import { MainContent } from "~/components/MainContent";
+import SupportersAvatars from "~/components/SupportersAvatars";
+import { useMatchesQuery } from "~/state/huis";
+import { useTosu } from "~/state/tosu";
+import trophy from "~/static/img/trophy.png";
 
 interface WinnerScreenProps {
   from?: string;

@@ -1,5 +1,5 @@
-import { useTosu } from "@/state/tosu";
 import { motion } from "motion/react";
+import { useTosu } from "~/state/tosu";
 
 export function Chat() {
   const { tourney } = useTosu();

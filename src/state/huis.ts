@@ -1,6 +1,7 @@
-import { getAvatarUrl, preloadImage } from "@/util";
 import { useQuery } from "@tanstack/react-query";
+import { getAvatarUrl, preloadImage } from "~/util";
 
+import type { output, ZodType } from "zod";
 import {
   mappoolSchema,
   matchesSchema,
@@ -9,9 +10,8 @@ import {
   type Beatmap,
   type Match,
   type Player,
-} from "@/schemas/huis";
+} from "~/schemas/huis";
 import { useSettings } from "./dashboard";
-import type { output, ZodType } from "zod";
 
 const API_BASE = "https://api.tourney.huismetbenen.nl";
 

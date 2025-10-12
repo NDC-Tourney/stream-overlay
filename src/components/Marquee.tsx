@@ -1,5 +1,5 @@
-import { cn } from "@/util";
 import type { HTMLAttributes } from "react";
+import { cn } from "~/util";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   direction?: "left" | "up";

@@ -1,9 +1,9 @@
 import {
-  useMatchesQuery,
   useMappoolQuery,
-  useTournamentQuery,
+  useMatchesQuery,
   useScheduleQuery,
   useSupportersQuery,
+  useTournamentQuery,
 } from "./state/huis";
 
 export function usePreload() {

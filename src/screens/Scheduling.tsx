@@ -1,13 +1,13 @@
-import { motion } from "framer-motion";
-import { sectionVariants, getAnimations } from "./animations";
-import type { AnimTypes } from "./animations";
-import dayjs from "dayjs";
-import { useMatchesQuery, useScheduleQuery } from "./state/huis";
-import logo from "./static/img/logo.png";
 import clsx from "clsx";
-import { MainContent } from "./components/MainContent";
-import { Casters } from "./components/Casters";
-import { useTosu } from "./state/tosu";
+import dayjs from "dayjs";
+import { motion } from "framer-motion";
+import type { AnimTypes } from "~/animations";
+import { getAnimations, sectionVariants } from "~/animations";
+import { Casters } from "~/components/Casters";
+import { MainContent } from "~/components/MainContent";
+import { useMatchesQuery, useScheduleQuery } from "~/state/huis";
+import { useTosu } from "~/state/tosu";
+import logo from "~/static/img/logo.png";
 
 interface SchedulingScreenProps {
   from?: string;

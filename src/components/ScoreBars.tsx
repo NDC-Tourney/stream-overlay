@@ -1,4 +1,4 @@
-import { useTosu } from "@/state/tosu";
+import { useTosu } from "~/state/tosu";
 import { StageInfo } from "./StageInfo";
 
 export function ScoreBars() {
