@@ -3,7 +3,7 @@ queue_rules:
     autoqueue: true
     name: merge queue
     queue_conditions:
-      - base = master
+      - base = main
       - or:
           - and:
               - "#approved-reviews-by >= 1"
@@ -45,7 +45,7 @@ merge_protections:
   - name: One review or merge label
     description: PR should either have one approved review or the skip-review label
     if:
-      - base = master
+      - base = main
     success_conditions:
       - or:
           - closed
