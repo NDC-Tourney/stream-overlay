@@ -25,18 +25,18 @@ process.stdin.removeAllListeners();
 process.stdin.on("readable", () => {
   for (const chunk of process.stdin.read() as string) {
     switch (chunk) {
-      case "o":
-        console.log("Opening overlay in browser...");
-        open(overlayUrl);
-        break;
       case "d":
         console.log("Opening dashboard in browser...");
         open(dashboardUrl);
         break;
+      case "o":
+        console.log("Opening overlay in browser...");
+        open(overlayUrl);
+        break;
       case "b":
         console.log("Opening both overlay and dashboard in browser...");
-        open(overlayUrl);
         open(dashboardUrl);
+        open(overlayUrl);
         break;
       case "q":
       case "\u0003": // Ctrl-C
@@ -48,8 +48,8 @@ process.stdin.on("readable", () => {
 
 console.log(
   `
-  Press [o] to open the overlay
   Press [d] to open the dashboard
+  Press [o] to open the overlay
   Press [b] to open both
 
   Press [q] to quit
