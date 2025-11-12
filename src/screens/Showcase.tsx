@@ -133,7 +133,7 @@ export function Showcase() {
               </motion.div>
             </motion.div>
           </AnimatePresence>
-          <motion.video
+          <video
             ref={(ref) => {
               videoRef.current = ref;
             }}
@@ -141,7 +141,7 @@ export function Showcase() {
             onTimeUpdate={(e) => {
               const video = e.currentTarget;
 
-              if (video.currentTime <= 2) {
+              if (video.currentTime <= 3) {
                 return;
               }
 
