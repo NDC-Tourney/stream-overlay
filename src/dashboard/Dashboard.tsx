@@ -216,19 +216,22 @@ export function Dashboard() {
         !matchDropdownRef.current.contains(e.target as Node)
       )
         setMatchOpen(false);
-      else if (
+
+      if (
         bansDropdownRef.current &&
         !bansDropdownRef.current.contains(e.target as Node)
       )
         setBansOpen(false);
-      else if (
+
+      if (
         picksDropdownRef.current &&
         !picksDropdownRef.current.contains(e.target as Node)
       )
         setPicksOpen(false);
-      else if (
+
+      if (
         showcaseDropdownRef.current &&
-        !showcaseDropdownRef.current?.contains(e.target as Node)
+        !showcaseDropdownRef.current.contains(e.target as Node)
       )
         setShowcaseOpen(false);
     };
