@@ -7,6 +7,7 @@ import { DashboardSettingsProvider } from "~/state/dashboard.tsx";
 import { TosuProvider } from "~/state/tosu.tsx";
 import "./dashboard.css";
 import { Dashboard } from "./Dashboard.tsx";
+import { IconContext } from "@phosphor-icons/react";
 
 function start() {
   const rootEl = document.getElementById("root");
@@ -31,7 +32,15 @@ function start() {
       <QueryClientProvider client={queryClient}>
         <DashboardSettingsProvider>
           <TosuProvider>
-            <Dashboard />
+            <IconContext.Provider
+              value={{
+                height: "1em",
+                width: "1em",
+                weight: "bold",
+              }}
+            >
+              <Dashboard />
+            </IconContext.Provider>
           </TosuProvider>
         </DashboardSettingsProvider>
       </QueryClientProvider>

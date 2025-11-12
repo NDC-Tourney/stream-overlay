@@ -210,9 +210,7 @@ button:active {
   border: 2px dashed #3b1474;
 }
 
-#scene-switcher-text,
-#mappool-controls-text,
-#countdown-text {
+.section-title {
   font-size: 36px;
   font-family: BenderBold, Helvetica, sans-serif;
   font-weight: normal;
@@ -223,15 +221,15 @@ button:active {
   padding-bottom: 20px;
 }
 
-#scene-switcher-select {
+.switcher-select {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  width: 500px;
-  justify-content: center;
+  width: 424px;
+  margin-left: 40px;
 }
 
-.scene-switcher-option {
+.switcher-option {
   width: 207px;
   height: 52px;
   background: #4c297f;
@@ -247,11 +245,11 @@ button:active {
   text-transform: capitalize;
 }
 
-.scene-switcher-option:hover {
+.switcher-option:hover {
   background: #5b34a0;
 }
 
-.scene-switcher-option.selected {
+.switcher-option.selected {
   background: #8454ca;
   font-family: "BenderBlack", sans-serif;
 }
@@ -369,6 +367,69 @@ button:active {
 }
 
 .ban-select-dropdown-options.show {
+  display: flex;
+}
+
+#select-id-input {
+  position: relative;
+  width: 187px;
+  height: 52px;
+  background: #4c2980;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-family: "BenderBold", sans-serif;
+  font-size: 24px;
+  color: white;
+  user-select: none;
+}
+
+#select-id-input::after {
+  content: "";
+  display: inline-block;
+  position: relative;
+  top: 4px;
+  margin-left: 8px;
+  border: 6px solid transparent;
+  border-top-color: #fff;
+  transition: transform 0.2s ease;
+  transform-origin: 50% 25%;
+}
+
+#select-id-input.open::after {
+  transform: rotate(180deg);
+}
+
+.select-dropdown-options {
+  position: absolute;
+  width: 207px;
+  background: #643ba1;
+  display: none;
+  flex-direction: column;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin-top: 52px;
+}
+
+.select-dropdown-options div {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+}
+
+.select-dropdown-options div:hover {
+  background: hsl(262 51% 38%);
+}
+
+.select-dropdown-options div.active {
+  background: hsl(261 51% 34%);
+}
+
+.select-dropdown-options.show {
   display: flex;
 }
 

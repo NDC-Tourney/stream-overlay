@@ -1,8 +1,20 @@
+import clsx from "clsx";
 import dayjs from "dayjs";
 import { produce } from "immer";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Activity,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { Match } from "~/schemas/huis";
 import { screenNames, type ScreenName } from "~/schemas/screens";
+import {
+  showcaseBeatmapSlots,
+  type ShowcaseBeatmapSlot,
+} from "~/schemas/showcase";
 import { useSettings } from "~/state/dashboard";
 import {
   useMappoolQuery,
@@ -10,6 +22,7 @@ import {
   useScheduleQuery,
 } from "~/state/huis";
 import { useTosu } from "~/state/tosu";
+import { PauseIcon, PlayIcon } from "@phosphor-icons/react";
 
 export function Dashboard() {
   const { matches } = useMatchesQuery();
@@ -19,7 +32,7 @@ export function Dashboard() {
   } = useTosu();
   const [settings, setSettings] = useSettings();
 
-  const autoselect = settings.automaticSelect;
+  const _autoselect = settings.automaticSelect;
 
   // default to the next upcoming match on startup
   useEffect(() => {
@@ -32,7 +45,7 @@ export function Dashboard() {
         }),
       );
     }
-  }, [settings.matchId, schedule.upcoming[0], schedule.recent[0]]);
+  }, [settings.matchId, setSettings, schedule]);
 
   const selectedMatch = useMemo(() => {
     const match = matches?.find((m) => m.uid === settings.matchId);
@@ -77,6 +90,21 @@ export function Dashboard() {
       }),
     );
 
+  const [showcaseOpen, setShowcaseOpen] = useState(false);
+  const setShowcaseBeatmap = (beatmap: ShowcaseBeatmapSlot) =>
+    setSettings(
+      produce((settings) => {
+        settings.showcaseBeatmap = beatmap;
+      }),
+    );
+
+  const toggleShowcasePlaying = () =>
+    setSettings(
+      produce((settings) => {
+        settings.showcasePlaying = !settings.showcasePlaying;
+      }),
+    );
+
   // Match ID dropdown
   const [matchIsOpen, setMatchOpen] = useState(false);
   const matchDropdownRef = useRef<HTMLDivElement>(null);
@@ -97,6 +125,7 @@ export function Dashboard() {
   const [picksOpen, setPicksOpen] = useState(false);
   const bansDropdownRef = useRef<HTMLDivElement>(null);
   const picksDropdownRef = useRef<HTMLDivElement>(null);
+  const showcaseDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleConfirm = (pickOrBan: "bans" | "picks") => {
     const map = pickOrBan === "bans" ? bansSelection : picksSelection;
@@ -129,9 +158,12 @@ export function Dashboard() {
           settings.activePlayer === "player1" ? "player2" : "player1";
       }),
     );
-    pickOrBan === "picks"
-      ? setPicksSelection("Confirmed!")
-      : setBansSelection("Confirmed!");
+
+    if (pickOrBan === "picks") {
+      setPicksSelection("Confirmed!");
+    } else {
+      setBansSelection("Confirmed!");
+    }
   };
 
   const lastMessage = chat.at(-1)?.message;
@@ -184,16 +216,21 @@ export function Dashboard() {
         !matchDropdownRef.current.contains(e.target as Node)
       )
         setMatchOpen(false);
-      if (
+      else if (
         bansDropdownRef.current &&
         !bansDropdownRef.current.contains(e.target as Node)
       )
         setBansOpen(false);
-      if (
+      else if (
         picksDropdownRef.current &&
         !picksDropdownRef.current.contains(e.target as Node)
       )
         setPicksOpen(false);
+      else if (
+        showcaseDropdownRef.current &&
+        !showcaseDropdownRef.current?.contains(e.target as Node)
+      )
+        setShowcaseOpen(false);
     };
 
     window.addEventListener("click", handleClickOutside);
@@ -302,12 +339,12 @@ export function Dashboard() {
 
       {/* Scene Switcher */}
       <div id="scene-switcher">
-        <div id="scene-switcher-text">Scene Switcher</div>
-        <div id="scene-switcher-select">
+        <div className="section-title">Scene Switcher</div>
+        <div className="switcher-select">
           {screenNames.map((scene) => (
             <button
               key={scene}
-              className={`scene-switcher-option ${settings.activeScreen === scene ? "selected" : ""}`}
+              className={`switcher-option ${settings.activeScreen === scene ? "selected" : ""}`}
               onClick={() => setSelectedScreen(scene)}
             >
               {scene}
@@ -318,99 +355,165 @@ export function Dashboard() {
 
       <div className="divider"></div>
 
-      {/* Mappool Control Panel */}
-      <div id="mappool-controls">
-        <div id="mappool-controls-text">Mappool Control Panel</div>
+      <Activity
+        mode={settings.activeScreen === "showcase" ? "hidden" : "visible"}
+      >
+        {/* Mappool Control Panel */}
+        <div id="mappool-controls">
+          <div className="section-title">Mappool Control</div>
 
-        {/* Red/Blue Input Buttons */}
-        <div id="player-select">
-          <button
-            id="red-input"
-            className={
-              settings.activePlayer === "player1" ? "red active" : "red"
-            }
-            onClick={() => setActivePlayer("player1")}
-          >
-            Red Input
-          </button>
-          <button
-            id="blue-input"
-            className={
-              settings.activePlayer === "player2" ? "blue active" : "blue"
-            }
-            onClick={() => setActivePlayer("player2")}
-          >
-            Blue Input
-          </button>
-        </div>
-
-        {/* Bans / Picks */}
-        <div id="mappool-select">
-          <div id="bans" ref={bansDropdownRef}>
-            <div id="bans-text">Ban/Unban</div>
-            <div
-              id="ban-select-id-input"
-              className={bansOpen ? "open" : ""}
-              onClick={() => setBansOpen(!bansOpen)}
+          {/* Red/Blue Input Buttons */}
+          <div id="player-select">
+            <button
+              id="red-input"
+              className={
+                settings.activePlayer === "player1" ? "red active" : "red"
+              }
+              onClick={() => setActivePlayer("player1")}
             >
-              {bansSelection}
-            </div>
-            <div
-              className={`ban-select-dropdown-options ${bansOpen ? "show" : ""}`}
+              Red Input
+            </button>
+            <button
+              id="blue-input"
+              className={
+                settings.activePlayer === "player2" ? "blue active" : "blue"
+              }
+              onClick={() => setActivePlayer("player2")}
             >
-              {mappoolOptions.map((opt) => (
-                <div
-                  key={opt}
-                  onClick={() => {
-                    setBansSelection(opt);
-                    setBansOpen(false);
-                  }}
-                >
-                  <BannedOrPicked map={opt} />
-                </div>
-              ))}
-            </div>
-            <button id="bans-confirm" onClick={() => handleConfirm("bans")}>
-              Confirm
+              Blue Input
             </button>
           </div>
 
-          <div id="picks" ref={picksDropdownRef}>
-            <div id="picks-text">Pick/Unpick</div>
+          {/* Bans / Picks */}
+          <div id="mappool-select">
+            <div id="bans" ref={bansDropdownRef}>
+              <div id="bans-text">Ban/Unban</div>
+              <div
+                id="ban-select-id-input"
+                className={bansOpen ? "open" : ""}
+                onClick={() => setBansOpen(!bansOpen)}
+              >
+                {bansSelection}
+              </div>
+              <div
+                className={`ban-select-dropdown-options ${bansOpen ? "show" : ""}`}
+              >
+                {mappoolOptions.map((opt) => (
+                  <div
+                    key={opt}
+                    onClick={() => {
+                      setBansSelection(opt);
+                      setBansOpen(false);
+                    }}
+                  >
+                    <BannedOrPicked map={opt} />
+                  </div>
+                ))}
+              </div>
+              <button id="bans-confirm" onClick={() => handleConfirm("bans")}>
+                Confirm
+              </button>
+            </div>
+
+            <div id="picks" ref={picksDropdownRef}>
+              <div id="picks-text">Pick/Unpick</div>
+              <div
+                id="pick-select-id-input"
+                className={picksOpen ? "open" : ""}
+                onClick={() => setPicksOpen(!picksOpen)}
+              >
+                {picksSelection}
+              </div>
+              <div
+                className={`pick-select-dropdown-options ${picksOpen ? "show" : ""}`}
+              >
+                {mappoolOptions.map((opt) => (
+                  <div
+                    key={opt}
+                    onClick={() => {
+                      setPicksSelection(opt);
+                      setPicksOpen(false);
+                    }}
+                  >
+                    <BannedOrPicked map={opt} />
+                  </div>
+                ))}
+              </div>
+              <button id="picks-confirm" onClick={() => handleConfirm("picks")}>
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      </Activity>
+
+      <Activity
+        mode={settings.activeScreen === "showcase" ? "visible" : "hidden"}
+      >
+        <div id="showcase-switcher">
+          <div className="section-title">Showcase Controls</div>
+          <div className="switcher-select">
             <div
-              id="pick-select-id-input"
-              className={picksOpen ? "open" : ""}
-              onClick={() => setPicksOpen(!picksOpen)}
+              id="select-id-input"
+              ref={showcaseDropdownRef}
+              className={clsx(showcaseOpen && "open")}
+              onClick={() => setShowcaseOpen((open) => !open)}
             >
-              {picksSelection}
+              {settings.showcaseBeatmap}
             </div>
             <div
-              className={`pick-select-dropdown-options ${picksOpen ? "show" : ""}`}
+              className={clsx(
+                "select-dropdown-options",
+                showcaseOpen && "show",
+              )}
             >
-              {mappoolOptions.map((opt) => (
+              {showcaseBeatmapSlots.map((beatmap) => (
                 <div
-                  key={opt}
+                  key={`showcase-switcher-${beatmap}`}
+                  className={clsx({
+                    active: beatmap === settings.showcaseBeatmap,
+                  })}
                   onClick={() => {
-                    setPicksSelection(opt);
-                    setPicksOpen(false);
+                    setShowcaseBeatmap(beatmap);
+                    setShowcaseOpen(false);
                   }}
                 >
-                  <BannedOrPicked map={opt} />
+                  {beatmap}
                 </div>
               ))}
             </div>
-            <button id="picks-confirm" onClick={() => handleConfirm("picks")}>
-              Confirm
+            <button
+              className="switcher-option"
+              onClick={() => toggleShowcasePlaying()}
+            >
+              <span
+                style={{
+                  display: "flex",
+                  gap: 10,
+                  alignItems: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                {settings.showcasePlaying ? (
+                  <>
+                    <PauseIcon /> Pause
+                  </>
+                ) : (
+                  <>
+                    <PlayIcon /> Play
+                  </>
+                )}
+              </span>
             </button>
           </div>
         </div>
-      </div>
+      </Activity>
 
       <div className="divider"></div>
 
       {/* Countdown */}
       <div id="countdown">
-        <div id="countdown-text">Countdown</div>
+        <div className="section-title">Countdown</div>
         <div id="countdown-controls">
           <input
             id="countdown-input"

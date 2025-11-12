@@ -7,6 +7,7 @@ export const screenNames = [
   "mappool",
   "scheduling",
   "winner",
+  "showcase",
 ] as const;
 
 export const screenNameSchema = z.literal(screenNames);

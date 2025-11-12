@@ -1,5 +1,6 @@
 import z from "zod";
 import { screenNameSchema } from "./screens";
+import { showcaseBeatmapSlots } from "./showcase";
 
 export const playerSchema = z.literal(["player1", "player2"]);
 
@@ -19,6 +20,8 @@ export const settingsSchema = z.object({
   player2: playerSettingsSchema,
   lastPickedBy: playerSchema.nullish(),
   activePlayer: playerSchema,
+  showcaseBeatmap: z.literal(showcaseBeatmapSlots),
+  showcasePlaying: z.boolean(),
 });
 
 export type DashboardSettings = z.infer<typeof settingsSchema>;

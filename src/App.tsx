@@ -4,6 +4,7 @@ import { Screens } from "./Screens";
 import { DashboardSettingsProvider } from "./state/dashboard";
 import { TosuProvider } from "./state/tosu";
 import "./static/style.css";
+import { IconContext } from "@phosphor-icons/react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,7 +21,11 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <DashboardSettingsProvider>
         <TosuProvider>
-          <Screens />
+          <IconContext.Provider
+            value={{ height: "1em", width: "1em", weight: "bold" }}
+          >
+            <Screens />
+          </IconContext.Provider>
         </TosuProvider>
       </DashboardSettingsProvider>
     </QueryClientProvider>

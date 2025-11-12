@@ -80,6 +80,8 @@ export function DashboardSettingsProvider({
     },
     activePlayer: "player1",
     showCountdown: true,
+    showcaseBeatmap: "NM1",
+    showcasePlaying: true,
   });
 
   const setSettings = useCallback(
