@@ -46,12 +46,12 @@ process.stdin.on("readable", () => {
   }
 });
 
-console.log(
-  `
+console.log(`
+  Welcome to tourney!dash :3
+
   Press [d] to open the dashboard
   Press [o] to open the overlay
   Press [b] to open both
 
   Press [q] to quit
-`,
-);
+`);

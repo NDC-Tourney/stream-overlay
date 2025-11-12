@@ -5,7 +5,7 @@ let currentVersion;
 async function checkAndApplyUpdates() {
   VelopackApp.build().run();
 
-  const REPO_URL = "https://github.com/NDC-Tourney/stream-overlay";
+  const REPO_URL = "https://github.com/NDC-Tourney/tourney-dash";
   const UPDATE_URL = `${REPO_URL}/releases/latest/download/`;
 
   try {

@@ -138,6 +138,7 @@ export function Showcase() {
               videoRef.current = ref;
             }}
             autoPlay={settings.showcasePlaying}
+            preload="auto"
             onTimeUpdate={(e) => {
               const video = e.currentTarget;
 

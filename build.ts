@@ -53,7 +53,7 @@ for (const [platform, target] of Object.entries(targets)) {
     }),
     compile: {
       target,
-      outfile: `${platform}/ndc-stream-overlay`,
+      outfile: `${platform}/tourney-dash`,
     },
     minify: true,
     sourcemap: true,

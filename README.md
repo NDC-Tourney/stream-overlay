@@ -1,4 +1,8 @@
-# NDC Overlay
+# tourney!dash
+
+A (work-in-progress) multipurpose streaming overlay for osu! tournaments.
+
+Currently used by [NDC](https://ndc.huismetbenen.nl) and [PNK](https://pnk.huismetbenen.nl).
 
 To install dependencies:
 
@@ -23,5 +27,3 @@ To build as a single file app:
 ```bash
 bun build
 ```
-
-This project was created using `bun init` in bun v1.2.21. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.

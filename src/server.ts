@@ -31,7 +31,7 @@ const args = parseArgs({
 }).values;
 
 if (args.help) {
-  console.log(`ndc-overlay [--host localhost] [-p|--port 7270]`);
+  console.log(`tourney-dash [--host localhost] [-p|--port 7270]`);
   process.exit();
 }
 
