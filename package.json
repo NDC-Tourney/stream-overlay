@@ -1,6 +1,6 @@
 {
   "name": "tourney-dash",
-  "version": "1.14.1",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "bun --hot src/main.ts",
