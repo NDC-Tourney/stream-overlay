@@ -43,7 +43,7 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "oxlint": "^1.23.0",
-    "oxlint-tsgolint": "^0.2.0",
+    "oxlint-tsgolint": "^0.5.1",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
     "velopack": "^0.0.1369-g1d5c984"
