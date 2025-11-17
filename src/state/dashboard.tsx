@@ -8,6 +8,7 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
+import { bracket } from "~/schemas/bracket";
 import {
   dashboardMessageSchema,
   type DashboardMessage,
@@ -82,6 +83,7 @@ export function DashboardSettingsProvider({
     showCountdown: true,
     showcaseBeatmap: "NM1",
     showcasePlaying: true,
+    seedingTeam: bracket.Teams[0]?.FullName ?? "",
   });
 
   const setSettings = useCallback(

@@ -46,6 +46,7 @@
     "oxlint": "^1.23.0",
     "oxlint-tsgolint": "^0.6.0",
     "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.1",
     "typescript": "^5.9.3",
     "velopack": "^0.0.1369-g1d5c984"
   }

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: "Saira", sans-serif;
+
   --animate-marquee-left: marquee-left var(--duration, 40s) linear infinite;
   --animate-marquee-up: marquee-up var(--duration, 40s) linear infinite;
 
@@ -24,16 +26,32 @@
 }
 
 @font-face {
+  font-family: "Saira";
+  src: url("../static/fonts/Saira-VariableFont_wdth,wght.ttf");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Saira";
+  src: url("../static/fonts/Saira-Italic-VariableFont_wdth,wght.ttf");
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "BenderBlack";
-  src: url("../fonts/Bender-Black.otf");
+  src: url("../static/fonts/Bender-Black.otf");
 }
 @font-face {
   font-family: "BenderBold";
-  src: url("../fonts/Bender-Bold.otf");
+  src: url("../static/fonts/Bender-Bold.otf");
 }
 @font-face {
   font-family: "BenderRegular";
-  src: url("../fonts/Bender-Regular.otf");
+  src: url("../static/fonts/Bender-Regular.otf");
 }
 
 body,
@@ -45,6 +63,7 @@ html {
   height: 1920px;
   width: 1920px;
   overflow: hidden;
+  font-synthesis-weight: none;
 }
 
 img {
@@ -1468,6 +1487,7 @@ p {
   position: relative;
   width: 1920px;
   height: 1080px;
+  background-color: black;
 }
 
 .showcase-video,
@@ -1485,7 +1505,6 @@ p {
   z-index: 1;
   font-size: 32px;
   color: white;
-  font-family: BenderBlack, Helvetica, sans-serif;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -1506,21 +1525,13 @@ p {
   filter: blur(1px);
 }
 
-.showcase-map-title {
-  font-family: BenderBlack, Helvetica, sans-serif;
-}
-
 .showcase-map-mapper {
   color: orange;
-  font-family: BenderBold, Helvetica, sans-serif;
-}
-
-.showcase-map-player {
-  font-family: BenderRegular, Helvetica, sans-serif;
 }
 
 .showcase-map-slot {
-  font-size: 64px;
+  font-size: 78px;
+  margin-right: 24px;
 }
 
 .showcase-map-stats {
@@ -1529,12 +1540,11 @@ p {
   align-items: flex-end;
   flex-basis: 100%;
   align-self: flex-end;
-  gap: 8px;
 }
 
 .showcase-map-stats-row {
   display: inline-flex;
-  gap: 16px;
+  gap: 12px;
 }
 
 .showcase-map-stat {

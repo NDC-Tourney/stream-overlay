@@ -8,6 +8,7 @@ export const screenNames = [
   "scheduling",
   "winner",
   "showcase",
+  "seeding",
 ] as const;
 
 export const screenNameSchema = z.literal(screenNames);

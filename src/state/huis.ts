@@ -3,6 +3,7 @@ import { getAvatarUrl, preloadImage } from "~/util";
 
 import type { output, ZodType } from "zod";
 import {
+  FlagsSchema,
   mappoolSchema,
   matchesSchema,
   supportersSchema,
@@ -43,7 +44,7 @@ async function fetchMatches(round: string = "current-week") {
   return fetchAndParse(`matches/list/${round}`, matchesSchema);
 }
 
-const TOURNAMENT_ID = "31"; // TODO: add tournament selection
+const TOURNAMENT_ID = "33"; // TODO: add tournament selection
 
 export function useMatchesQuery() {
   const {
@@ -148,6 +149,17 @@ export function useTournamentQuery() {
   return useQuery({
     queryKey: ["huis", "tournament", TOURNAMENT_ID],
     queryFn: fetchTournament,
+  });
+}
+
+async function fetchFlags() {
+  return fetchAndParse(`assets/flags/tournament`, FlagsSchema);
+}
+
+export function useFlagsQuery() {
+  return useQuery({
+    queryKey: ["huis", "flags", TOURNAMENT_ID],
+    queryFn: fetchFlags,
   });
 }
 

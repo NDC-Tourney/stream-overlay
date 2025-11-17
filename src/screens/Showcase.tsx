@@ -68,7 +68,7 @@ export function Showcase() {
   });
 
   return (
-    <div className="showcase">
+    <div className="showcase font-sans">
       <AnimatePresence mode="wait" onExitComplete={() => setShowOverlay(false)}>
         <motion.div
           key={`showcase-video-${activeBeatmap}`}
@@ -86,25 +86,25 @@ export function Showcase() {
               exit="hidden"
             >
               <motion.div
-                className="showcase-map-info showcase-map-section"
+                className="showcase-map-info showcase-map-section font leading-11"
                 variants={fromLeft}
               >
-                <div className="showcase-map-title">{`${map.artist} – ${map.title} [${map.difficulty}]`}</div>
-                <div className="showcase-map-mapper">
+                <div className="showcase-map-title font-bold">{`${map.artist} – ${map.title} [${map.difficulty}]`}</div>
+                <div className="showcase-map-mapper font-medium">
                   Mapset by {map.mapper}
                 </div>
-                <div className="showcase-map-player">
+                <div className="showcase-map-player font-normal">
                   Replay by {map.player}
                 </div>
               </motion.div>
               <motion.div
-                className="showcase-map-slot showcase-map-section"
+                className="showcase-map-slot showcase-map-section font-extrabold"
                 variants={fromRight}
               >
                 {activeBeatmap}
               </motion.div>
               <motion.div
-                className="showcase-map-stats showcase-map-section"
+                className="showcase-map-stats showcase-map-section font-semibold tabular-nums"
                 variants={fromRight}
               >
                 <div className="showcase-map-stat" style={{ fontSize: 32 }}>
@@ -112,7 +112,7 @@ export function Showcase() {
                 </div>
                 <div
                   className="showcase-map-stats-row"
-                  style={{ fontSize: 28 }}
+                  style={{ fontSize: 24 }}
                 >
                   <div className="showcase-map-stat">
                     {map.length} <ClockIcon />
@@ -123,7 +123,7 @@ export function Showcase() {
                 </div>
                 <div
                   className="showcase-map-stats-row"
-                  style={{ fontSize: 24 }}
+                  style={{ fontSize: 20 }}
                 >
                   <div className="showcase-map-stat">AR {map.ar}</div>
                   <div className="showcase-map-stat">CS {map.cs}</div>
@@ -157,7 +157,7 @@ export function Showcase() {
                 video.pause();
               }
             }}
-            src={`https://i.bas.sh/showcase/${activeBeatmap}.mp4`}
+            src={`https://i.bas.sh/showcase/RO32/${activeBeatmap}.mp4?awawa`}
             className="showcase-video"
             disableRemotePlayback
             disablePictureInPicture

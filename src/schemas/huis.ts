@@ -275,3 +275,24 @@ export const supportersSchema = z.array(
 );
 
 export type Supporters = z.infer<typeof supportersSchema>;
+
+export const FlagsSchema = z.object({
+  regions: z.array(
+    z.object({
+      data: z.base64(),
+      extension: z.string(),
+      mime: z.string(),
+      name: z.string(),
+    }),
+  ),
+  teams: z.array(
+    z.object({
+      data: z.base64(),
+      extension: z.string(),
+      mime: z.string(),
+      name: z.string(),
+    }),
+  ),
+});
+
+export type Flags = z.infer<typeof FlagsSchema>;

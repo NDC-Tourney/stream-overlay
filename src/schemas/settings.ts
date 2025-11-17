@@ -22,6 +22,7 @@ export const settingsSchema = z.object({
   activePlayer: playerSchema,
   showcaseBeatmap: z.literal(showcaseBeatmapSlots),
   showcasePlaying: z.boolean(),
+  seedingTeam: z.string(),
 });
 
 export type DashboardSettings = z.infer<typeof settingsSchema>;

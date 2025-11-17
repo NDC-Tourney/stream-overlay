@@ -1,14 +1,7 @@
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { produce } from "immer";
-import {
-  Activity,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Match } from "~/schemas/huis";
 import { screenNames, type ScreenName } from "~/schemas/screens";
 import {
@@ -23,6 +16,8 @@ import {
 } from "~/state/huis";
 import { useTosu } from "~/state/tosu";
 import { PauseIcon, PlayIcon } from "@phosphor-icons/react";
+import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { bracket } from "~/schemas/bracket";
 
 export function Dashboard() {
   const { matches } = useMatchesQuery();
@@ -80,6 +75,10 @@ export function Dashboard() {
       produce((settings) => {
         settings.matchId = match.uid;
         settings.countdown = match.date;
+
+        if (match.date && match.date < Date.now()) {
+          settings.showCountdown = false;
+        }
       }),
     );
 
@@ -105,6 +104,14 @@ export function Dashboard() {
       }),
     );
 
+  const [seedingPickerOpen, setSeedingPickerOpen] = useState(false);
+  const setSeedingteam = (team: string) =>
+    setSettings(
+      produce((settings) => {
+        settings.seedingTeam = team;
+      }),
+    );
+
   // Match ID dropdown
   const [matchIsOpen, setMatchOpen] = useState(false);
   const matchDropdownRef = useRef<HTMLDivElement>(null);
@@ -126,6 +133,7 @@ export function Dashboard() {
   const bansDropdownRef = useRef<HTMLDivElement>(null);
   const picksDropdownRef = useRef<HTMLDivElement>(null);
   const showcaseDropdownRef = useRef<HTMLDivElement>(null);
+  const seedingTeamDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleConfirm = (pickOrBan: "bans" | "picks") => {
     const map = pickOrBan === "bans" ? bansSelection : picksSelection;
@@ -234,6 +242,12 @@ export function Dashboard() {
         !showcaseDropdownRef.current.contains(e.target as Node)
       )
         setShowcaseOpen(false);
+
+      if (
+        seedingTeamDropdownRef.current &&
+        !seedingTeamDropdownRef.current.contains(e.target as Node)
+      )
+        setSeedingPickerOpen(false);
     };
 
     window.addEventListener("click", handleClickOutside);
@@ -293,7 +307,6 @@ export function Dashboard() {
   return (
     <div id="main">
       <div id="title">tourney!dash</div>
-
       {/* Match Select */}
       <div id="match-select">
         <div id="match-select-id" ref={matchDropdownRef}>
@@ -337,9 +350,7 @@ export function Dashboard() {
           ></input>
         </div> */}
       </div>
-
       <div className="divider"></div>
-
       {/* Scene Switcher */}
       <div id="scene-switcher">
         <div className="section-title">Scene Switcher</div>
@@ -355,105 +366,104 @@ export function Dashboard() {
           ))}
         </div>
       </div>
-
       <div className="divider"></div>
 
-      <Activity
-        mode={settings.activeScreen === "showcase" ? "hidden" : "visible"}
-      >
-        {/* Mappool Control Panel */}
-        <div id="mappool-controls">
-          <div className="section-title">Mappool Control</div>
+      {/* Mappool Control Panel */}
+      {settings.activeScreen !== "mappool" &&
+        settings.activeScreen !== "seeding" && (
+          <motion.div key="mappool-controls">
+            <div className="section-title">Mappool Controls</div>
 
-          {/* Red/Blue Input Buttons */}
-          <div id="player-select">
-            <button
-              id="red-input"
-              className={
-                settings.activePlayer === "player1" ? "red active" : "red"
-              }
-              onClick={() => setActivePlayer("player1")}
-            >
-              Red Input
-            </button>
-            <button
-              id="blue-input"
-              className={
-                settings.activePlayer === "player2" ? "blue active" : "blue"
-              }
-              onClick={() => setActivePlayer("player2")}
-            >
-              Blue Input
-            </button>
-          </div>
-
-          {/* Bans / Picks */}
-          <div id="mappool-select">
-            <div id="bans" ref={bansDropdownRef}>
-              <div id="bans-text">Ban/Unban</div>
-              <div
-                id="ban-select-id-input"
-                className={bansOpen ? "open" : ""}
-                onClick={() => setBansOpen(!bansOpen)}
+            {/* Red/Blue Input Buttons */}
+            <div id="player-select">
+              <button
+                id="red-input"
+                className={
+                  settings.activePlayer === "player1" ? "red active" : "red"
+                }
+                onClick={() => setActivePlayer("player1")}
               >
-                {bansSelection}
-              </div>
-              <div
-                className={`ban-select-dropdown-options ${bansOpen ? "show" : ""}`}
+                Red Input
+              </button>
+              <button
+                id="blue-input"
+                className={
+                  settings.activePlayer === "player2" ? "blue active" : "blue"
+                }
+                onClick={() => setActivePlayer("player2")}
               >
-                {mappoolOptions.map((opt) => (
-                  <div
-                    key={opt}
-                    onClick={() => {
-                      setBansSelection(opt);
-                      setBansOpen(false);
-                    }}
-                  >
-                    <BannedOrPicked map={opt} />
-                  </div>
-                ))}
-              </div>
-              <button id="bans-confirm" onClick={() => handleConfirm("bans")}>
-                Confirm
+                Blue Input
               </button>
             </div>
 
-            <div id="picks" ref={picksDropdownRef}>
-              <div id="picks-text">Pick/Unpick</div>
-              <div
-                id="pick-select-id-input"
-                className={picksOpen ? "open" : ""}
-                onClick={() => setPicksOpen(!picksOpen)}
-              >
-                {picksSelection}
+            {/* Bans / Picks */}
+            <div id="mappool-select">
+              <div id="bans" ref={bansDropdownRef}>
+                <div id="bans-text">Ban/Unban</div>
+                <div
+                  id="ban-select-id-input"
+                  className={bansOpen ? "open" : ""}
+                  onClick={() => setBansOpen(!bansOpen)}
+                >
+                  {bansSelection}
+                </div>
+                <div
+                  className={`ban-select-dropdown-options ${bansOpen ? "show" : ""}`}
+                >
+                  {mappoolOptions.map((opt) => (
+                    <div
+                      key={opt}
+                      onClick={() => {
+                        setBansSelection(opt);
+                        setBansOpen(false);
+                      }}
+                    >
+                      <BannedOrPicked map={opt} />
+                    </div>
+                  ))}
+                </div>
+                <button id="bans-confirm" onClick={() => handleConfirm("bans")}>
+                  Confirm
+                </button>
               </div>
-              <div
-                className={`pick-select-dropdown-options ${picksOpen ? "show" : ""}`}
-              >
-                {mappoolOptions.map((opt) => (
-                  <div
-                    key={opt}
-                    onClick={() => {
-                      setPicksSelection(opt);
-                      setPicksOpen(false);
-                    }}
-                  >
-                    <BannedOrPicked map={opt} />
-                  </div>
-                ))}
-              </div>
-              <button id="picks-confirm" onClick={() => handleConfirm("picks")}>
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
-      </Activity>
 
-      <Activity
-        mode={settings.activeScreen === "showcase" ? "visible" : "hidden"}
-      >
-        <div id="showcase-switcher">
+              <div id="picks" ref={picksDropdownRef}>
+                <div id="picks-text">Pick/Unpick</div>
+                <div
+                  id="pick-select-id-input"
+                  className={picksOpen ? "open" : ""}
+                  onClick={() => setPicksOpen(!picksOpen)}
+                >
+                  {picksSelection}
+                </div>
+                <div
+                  className={`pick-select-dropdown-options ${picksOpen ? "show" : ""}`}
+                >
+                  {mappoolOptions.map((opt) => (
+                    <div
+                      key={opt}
+                      onClick={() => {
+                        setPicksSelection(opt);
+                        setPicksOpen(false);
+                      }}
+                    >
+                      <BannedOrPicked map={opt} />
+                    </div>
+                  ))}
+                </div>
+                <button
+                  id="picks-confirm"
+                  onClick={() => handleConfirm("picks")}
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+      {settings.activeScreen === "showcase" && (
+        <motion.div key="showcase-controls">
           <div className="section-title">Showcase Controls</div>
           <div className="switcher-select">
             <div
@@ -509,34 +519,73 @@ export function Dashboard() {
               </span>
             </button>
           </div>
-        </div>
-      </Activity>
+        </motion.div>
+      )}
 
-      <div className="divider"></div>
+      {settings.activeScreen === "seeding" && (
+        <motion.div key="seeding-controls">
+          <div className="section-title">Seeding Controls</div>
+          <div className="switcher-select">
+            <div
+              id="seeding-select-id-input"
+              ref={seedingTeamDropdownRef}
+              className={(clsx(seedingPickerOpen && "open"), "mx-auto")}
+              onClick={() => setSeedingPickerOpen((open) => !open)}
+            >
+              {settings.seedingTeam}
+            </div>
+            <div
+              className={clsx(
+                "seeding-select-dropdown-options",
+                seedingPickerOpen && "show",
+              )}
+            >
+              {bracket.Teams.map((team) => (
+                <div
+                  key={`seeding-switcher-${team.Acronym}`}
+                  className={clsx({
+                    active: team.FullName === settings.seedingTeam,
+                  })}
+                  onClick={() => {
+                    setSeedingteam(team.FullName);
+                    setSeedingPickerOpen(false);
+                  }}
+                >
+                  {team.FullName}
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
 
-      {/* Countdown */}
-      <div id="countdown">
-        <div className="section-title">Countdown</div>
-        <div id="countdown-controls">
-          <input
-            id="countdown-input"
-            type="time"
-            value={countdownDate}
-            onChange={handleCountdownDateChange}
-            step={60}
-          />
-          <div className="checkbox-input">
-            <label htmlFor="show-countdown">Show countdown</label>
+      <motion.div key="countdown-section">
+        <div className="divider"></div>
+
+        {/* Countdown */}
+        <div id="countdown">
+          <div className="section-title">Countdown</div>
+          <div id="countdown-controls">
             <input
-              name="show-countdown"
-              id="show-countdown"
-              type="checkbox"
-              checked={settings.showCountdown}
-              onChange={(e) => setCountdownVisibility(e.target.checked)}
+              id="countdown-input"
+              type="time"
+              value={countdownDate}
+              onChange={handleCountdownDateChange}
+              step={60}
             />
+            <div className="checkbox-input">
+              <label htmlFor="show-countdown">Show countdown</label>
+              <input
+                name="show-countdown"
+                id="show-countdown"
+                type="checkbox"
+                checked={settings.showCountdown}
+                onChange={(e) => setCountdownVisibility(e.target.checked)}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

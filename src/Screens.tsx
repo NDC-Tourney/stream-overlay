@@ -8,6 +8,7 @@ import { StartScreen } from "./screens/Startscreen";
 import { VersusScreen } from "./screens/Versus";
 import { WinnerScreen } from "./screens/Winner";
 import { Showcase } from "./screens/Showcase";
+import { Seeding } from "./screens/Seeding";
 
 export function Screens() {
   usePreload();
@@ -38,6 +39,7 @@ export function Screens() {
           <WinnerScreen key="winner" from={previous} to="winner" />
         )}
         {activeScreen === "showcase" && <Showcase />}
+        {activeScreen === "seeding" && <Seeding />}
       </AnimatePresence>
     </div>
   );
