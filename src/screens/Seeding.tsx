@@ -63,7 +63,7 @@ export function Seeding() {
             </div>
           </div>
         </div>
-        <div className="grid w-full grid-cols-[9fr_1fr_1fr] text-2xl">
+        <div className="grid w-5/6 grid-cols-[6fr_1fr_1fr] text-2xl">
           {team.SeedingResults.map((pool) => (
             <div
               key={`seeding-pool-${pool.Mod}`}

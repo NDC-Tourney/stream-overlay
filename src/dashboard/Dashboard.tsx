@@ -369,7 +369,7 @@ export function Dashboard() {
       <div className="divider"></div>
 
       {/* Mappool Control Panel */}
-      {settings.activeScreen !== "mappool" &&
+      {settings.activeScreen !== "showcase" &&
         settings.activeScreen !== "seeding" && (
           <motion.div key="mappool-controls">
             <div className="section-title">Mappool Controls</div>
