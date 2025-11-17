@@ -1,6 +1,6 @@
 {
   "name": "tourney-dash",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "scripts": {
     "dev": "bun --hot src/main.ts",
@@ -15,7 +15,7 @@
     "upload-release:win": "vpk upload github --repoUrl https://github.com/NDC-Tourney/tourney-dash --publish --tag $(git describe --tags) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c win",
     "upload-release:linux": "vpk upload github --repoUrl https://github.com/NDC-Tourney/tourney-dash --publish --tag $(git describe --tags) --targetCommitish $(git rev-parse HEAD) --token $(gh auth token) -c linux --merge",
     "upload-release": "bun run upload-release:win && bun run upload-release:linux",
-    "full-release-process": "git push && git push --tags && bun run build && bun run prepare-pack && bun run pack && bun run upload-release"
+    "full-release-process": "git switch main && git push && git push --tags && bun run build && bun run prepare-pack && bun run pack && bun run upload-release && git switch -"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
